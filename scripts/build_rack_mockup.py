@@ -147,6 +147,16 @@ def run(_context: str):
                            box(side * POST_X_INNER, side * 127, y_range[0], y_range[1],
                                20, 180)))
 
+    # Corner blocks: the posts' mounting faces are thin (3 mm) so the ears
+    # can nest behind them, but the real corner extrusions are full depth.
+    # Fill the joint voids behind the plates at the top/bottom frame bands.
+    for side in (-1, 1):
+        for z0, z1 in ((RAIL_PLATE, 20.0), (180.0, 200.0 - RAIL_PLATE)):
+            for band_y0, band_y1 in ((FRAME_Y0, 0.0), (4 * RU, FRAME_Y1)):
+                bodies.append(("Frame corner block",
+                               box(side * POST_X_INNER, side * 127,
+                                   band_y0, band_y1, z0, z1)))
+
     # Side panels + top cover (the RackMate T0's sides and top are closed
     # with smoked acrylic)
     for side in (-1, 1):
