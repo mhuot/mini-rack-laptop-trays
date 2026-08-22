@@ -90,6 +90,8 @@ Total stack behind the rear rail is ~96 mm (ears 69 + pads 3 + bar 4 + fans 20) 
 Models are built in Fusion 360, driven by the Python scripts in [`scripts/`](scripts/) (run inside Fusion — e.g. via a Fusion MCP add-in, or paste into a Fusion script). Each script is parametric through the constants at the top and regenerates its part from scratch:
 
 - [`build_rear_ear_v2.py`](scripts/build_rear_ear_v2.py) — copies the proven rear ear bodies and adds the insert bosses
+- [`export_front_ear.py`](scripts/export_front_ear.py) — exports the front ear with a slicer-friendly tangency relief
+- [`build_print_plate.py`](scripts/build_print_plate.py) — assembles the one-tray 3MF print plates from the STLs
 - [`build_rear_fan_bar.py`](scripts/build_rear_fan_bar.py) — the ducted fan bar
 - [`build_rack_mockup.py`](scripts/build_rack_mockup.py) — the full-rack mockup used for the renders on this page
 
