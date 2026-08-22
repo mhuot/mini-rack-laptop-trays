@@ -8,7 +8,7 @@ Each laptop slides in and out like a drawer on four 8 mm smooth rods, held by 3D
 
 ![Turntable spin of the full rack](docs/images/rack-turntable.gif)
 
-Want to spin it yourself? GitHub renders STL files with an interactive 3D viewer — open **[docs/rack-mockup.stl](docs/rack-mockup.stl)** and drag to orbit the whole assembly. (It's a visual mockup, not a print file — the printable STLs live in [`exports/`](exports/).)
+Want to spin it yourself? **[Open the interactive 3D viewer](https://mhuot.github.io/mini-rack-laptop-trays/)** — full color, drag to orbit, scroll to zoom. GitHub also renders **[docs/rack-mockup.stl](docs/rack-mockup.stl)** with its built-in STL viewer. (Both are visual mockups, not print files — the printable STLs live in [`exports/`](exports/). Printed parts are shown in orange; print in whatever color you like.)
 
 ## How it works
 
@@ -39,19 +39,34 @@ Anything ≤ 222 mm deep and ≤ ~20 mm thick that can hang its side edges on ro
 | Part | Qty | Notes |
 |---|---|---|
 | Front Ear (`exports/front_ear.stl`) | 2 | mirror one in the slicer |
-| Rear Ear v2 (`exports/rear_ear_v2.stl`) | 2 | mirror one; carries insert bosses |
+| Rear Ear v2 (`exports/rear_ear_v2.stl`) | 2 | mirror one; bosses take M3 heat-set inserts |
 | Rear Fan Bar (`exports/rear_fan_bar.stl`) | 1 | prints flat, duct panels up, no supports |
+
+No heat-set inserts on hand? Print `exports/rear_ear_v2_selftap.stl` instead — same part with Ø2.5 pilot holes that the M3 screws thread directly into the plastic. Good for roughly a dozen assembly cycles; the insert version is the durable choice.
 
 **Hardware:**
 
 | Item | Qty | Notes |
 |---|---|---|
-| 8 mm smooth rod, 275 mm | 4 | |
+| 8 mm smooth rod | 4 | 2× 275 mm + 2× 320 mm — see [Smooth rods](#smooth-rods) |
 | Noctua NF-A4x20 5V | 4 | ships with OmniJoin + fan screws |
-| M3 × 3 mm heat-set inserts (short) | 4 | e.g. CNC Kitchen; Ø4.0 × 3.2 pockets |
+| M3 × 3 mm heat-set inserts (short) | 4 | e.g. CNC Kitchen; Ø4.0 × 3.2 pockets (skip for the self-tap ear variant) |
 | M3 × 8 socket-head screws | 4 | |
 | Rack screws | 8 | per your rack's rail standard |
 | USB power for fans | 1 | 5 V lead + splitter (one can feed both trays) |
+
+## Smooth rods
+
+![Side view: rod runs and laptop overhang](docs/images/rack-side.png)
+
+Any 8 mm smooth rod works (hardened steel or stainless linear rod is ideal — it's what the renders show). The geometry that sets the lengths:
+
+- Rods seat **267 mm** behind the front rail face, against the rear ears' back plates.
+- The front ears sit **entirely in front of the front rail** (they're 8 mm deep — the whole ear is proud of the rack, not just a mounting tab), so a rod cut to **275 mm** ends flush with the front ear's face.
+- The laptop overhangs the front ears (MacBook Pro 14: ~45 mm, Surface 13.8: ~33 mm). Cutting the **two lower rods to ~320 mm** runs them out under that overhang so the front lip is supported right to its edge — that's the recommended setup shown above. The **upper rods stay at 275 mm** (they only retain the laptop; no reason to extend them).
+- Deburr and lightly chamfer the ends so they slide into the rear sockets without shaving the print.
+
+To install: slide each rod through its front ear bore, across the rack, and into the rear ear until it stops at the back plate. The bores are a snug 8.0 mm fit — no retention hardware needed, and the fan bar caps the rear ends once mounted.
 
 ## Assembly
 

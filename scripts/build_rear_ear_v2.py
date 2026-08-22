@@ -26,6 +26,9 @@ BOSS_ROWS = (15.0, 29.45)
 PAD_DIA = 9.0
 PAD_Z_START = 69.0
 PAD_Z_END = 72.0
+# Heat-set variant (default): pocket for CNC Kitchen M3 x 3 short inserts.
+# Self-tap variant (no inserts): set INSERT_HOLE_DIA = 2.5 and
+# INSERT_HOLE_DEPTH = 4.7 — the M3 screw thread-forms into the PETG.
 INSERT_HOLE_DIA = 4.0
 INSERT_HOLE_DEPTH = 3.2
 

@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mini-Rack Laptop Trays — interactive 3D</title>
+<meta name="description" content="1U sliding laptop trays for 10-inch mini racks with ducted rear exhaust cooling. Spin the full assembly in 3D.">
+<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+<style>
+  :root {
+    --bg: #f6f7f9;
+    --panel: #ffffff;
+    --text: #1a1d21;
+    --muted: #5b6470;
+    --accent: #2563eb;
+    --border: #e2e6eb;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #101216;
+      --panel: #181b21;
+      --text: #e8eaed;
+      --muted: #9aa3af;
+      --accent: #60a5fa;
+      --border: #2a2f38;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  header {
+    padding: 2rem 1.5rem 1rem;
+    max-width: 960px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  h1 { font-size: 1.6rem; letter-spacing: -0.02em; }
+  header p { color: var(--muted); margin-top: 0.35rem; }
+  header a { color: var(--accent); text-decoration: none; }
+  header a:hover { text-decoration: underline; }
+  .viewer-wrap {
+    flex: 1;
+    max-width: 960px;
+    margin: 1rem auto 0;
+    width: 100%;
+    padding: 0 1.5rem;
+  }
+  model-viewer {
+    width: 100%;
+    height: min(70vh, 640px);
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+  }
+  .hint { color: var(--muted); font-size: 0.85rem; text-align: center; padding: 0.6rem 0 0; }
+  footer {
+    max-width: 960px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 1.5rem;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Mini-Rack Laptop Trays</h1>
+  <p>1U sliding trays for a 10-inch mini rack — MacBook Pro 14 and Surface Laptop 13.8 on smooth rods,
+     with ducted rear exhaust cooling. Drag to orbit, scroll to zoom.
+     Full build details on <a href="https://github.com/mhuot/mini-rack-laptop-trays">GitHub</a>.</p>
+</header>
+<div class="viewer-wrap">
+  <model-viewer
+    src="models/rack-mockup.glb"
+    alt="3D model of a 4U 10-inch mini rack holding two laptops on sliding rod trays with rear fan bars"
+    camera-controls
+    auto-rotate
+    auto-rotate-delay="1500"
+    rotation-per-second="18deg"
+    shadow-intensity="0.8"
+    exposure="1.05"
+    camera-orbit="35deg 72deg 105%"
+    interaction-prompt="none">
+  </model-viewer>
+  <p class="hint">Front is toward the protruding laptops; the brown blocks are the Noctua exhaust fans.</p>
+</div>
+<footer>
+  Printed parts, STLs, and the Fusion 360 scripts that generate this model are in the
+  <a href="https://github.com/mhuot/mini-rack-laptop-trays">repository</a>. MIT licensed.
+</footer>
+</body>
+</html>
