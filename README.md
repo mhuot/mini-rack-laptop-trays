@@ -6,6 +6,10 @@
 
 Each laptop slides in and out like a drawer on four 8 mm smooth rods, held by 3D-printed ears on the front and rear rack rails. A printed fan bar with four 40 mm Noctua fans bolts onto the rear ears and pulls air across the top and bottom of the laptop, exhausting out the back — all within a single rack unit.
 
+![Turntable spin of the full rack](docs/images/rack-turntable.gif)
+
+Want to spin it yourself? GitHub renders STL files with an interactive 3D viewer — open **[docs/rack-mockup.stl](docs/rack-mockup.stl)** and drag to orbit the whole assembly. (It's a visual mockup, not a print file — the printable STLs live in [`exports/`](exports/).)
+
 ## How it works
 
 | | |
@@ -34,7 +38,7 @@ Anything ≤ 222 mm deep and ≤ ~20 mm thick that can hang its side edges on ro
 
 | Part | Qty | Notes |
 |---|---|---|
-| Front Ear | 2 | mirror one in the slicer |
+| Front Ear (`exports/front_ear.stl`) | 2 | mirror one in the slicer |
 | Rear Ear v2 (`exports/rear_ear_v2.stl`) | 2 | mirror one; carries insert bosses |
 | Rear Fan Bar (`exports/rear_fan_bar.stl`) | 1 | prints flat, duct panels up, no supports |
 
