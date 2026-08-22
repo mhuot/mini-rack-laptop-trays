@@ -43,6 +43,8 @@ Anything ≤ 222 mm deep and ≤ ~20 mm thick that can hang its side edges on ro
 | Rear Ear v2 (`exports/rear_ear_v2.stl`) | 2 | mirror one; bosses take M3 heat-set inserts |
 | Rear Fan Bar (`exports/rear_fan_bar.stl`) | 1 | prints flat, duct panels up, no supports |
 
+**Ready-made print plates:** `exports/print_plate_one_tray_heatset.3mf` (also `_selftap` / `_nuttrap`) opens in PrusaSlicer with a complete tray set arranged for a 250 × 210 bed — both ears mirrored correctly and the fan bar oriented duct-panels-up. Regenerate with `scripts/build_print_plate.py`.
+
 No heat-set inserts on hand? Two alternatives, same fan bar and M3 × 8 screws either way:
 
 - **Nut-trap** (`exports/rear_ear_v2_nuttrap.stl`) — a slightly taller rib with side-loading slots that capture standard **M3 hex nuts** (a DIN 562 square nut fits the same slot). Metal threads, unlimited assembly cycles, hardware you already have. The fan bar sits 2 mm further back (~98 mm total behind the rear rail).
