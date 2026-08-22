@@ -30,7 +30,7 @@ PLATE_THICKNESS = 4.0
 
 # Mounting into Rear Ear v2 insert bosses (M3 socket-head screws)
 BOSS_X = 102.82          # rod line: rail hole span/2 - 15.44
-BOSS_ROWS = (14.0, 30.45)  # symmetric about U mid-height 22.225
+BOSS_ROWS = (15.0, 29.45)  # symmetric about U mid-height 22.225, clear of rod bores
 SCREW_CLEAR_DIA = 3.4
 HEAD_CBORE_DIA = 6.5
 HEAD_CBORE_DEPTH = 2.0

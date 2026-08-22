@@ -22,7 +22,7 @@ SOURCE_DOC = "MacBook Pro Rear Ear"
 SOURCE_BODIES = ("Rear Ear", "Back Plate")
 
 BOSS_X = -7.5
-BOSS_ROWS = (14.0, 30.45)
+BOSS_ROWS = (15.0, 29.45)
 PAD_DIA = 9.0
 PAD_Z_START = 69.0
 PAD_Z_END = 72.0
