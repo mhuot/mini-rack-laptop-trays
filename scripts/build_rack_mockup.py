@@ -191,6 +191,16 @@ def run(_context: str):
                       y0 + 0.4, y0 + 44.05, 269.0, 272.0)
             temp_mgr.booleanOperation(
                 ear, rib, adsk.fusion.BooleanTypes.UnionBooleanType)
+            # Outboard side wall closes the ear's open side window
+            wall = box(sign * (EAR_OFFSET_X + 0.0), sign * (EAR_OFFSET_X + 2.0),
+                       y0, y0 + 44.45, 200.0, 267.0)
+            temp_mgr.booleanOperation(
+                ear, wall, adsk.fusion.BooleanTypes.UnionBooleanType)
+            relief = box(sign * (EAR_OFFSET_X - 0.05),
+                         sign * (EAR_OFFSET_X + 0.65),
+                         y0 + 9.7, y0 + 34.7, 199.9, 267.1)
+            temp_mgr.booleanOperation(
+                ear, relief, adsk.fusion.BooleanTypes.DifferenceBooleanType)
             for row in (15.0, 29.45):
                 pocket = cyl_z(sign * ROD_X, y0 + row, 268.8, 272.1, 4.0)
                 temp_mgr.booleanOperation(

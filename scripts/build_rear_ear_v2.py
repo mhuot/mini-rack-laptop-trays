@@ -47,6 +47,16 @@ NUT_SLOT_WIDTH = 5.7          # grips the 5.5 across-flats of an M3 nut
 NUT_SLOT_Z0, NUT_SLOT_Z1 = 69.4, 72.1
 NUT_SLOT_X0, NUT_SLOT_X1 = -12.1, -4.6  # opens at the rib's inboard face
 SCREW_RELIEF_Z0 = 68.0        # leaves 1 mm of wall before the plate face
+# Outboard side wall: the stock ear's outboard face is open behind the 2 mm
+# flange, exposing the duct interior to outside air. A 2 mm wall closes it,
+# attached along the inboard structure's outer face (x = 0), with a 0.6 mm
+# relief step in the laptop band (the laptop's edge nominally reaches
+# x = +0.28, so the wall clears it there).
+SIDE_WALL_X0, SIDE_WALL_X1 = 0.0, 2.0
+SIDE_WALL_Y0, SIDE_WALL_Y1 = 0.0, 44.45
+SIDE_WALL_Z0, SIDE_WALL_Z1 = 0.0, 67.0
+LAPTOP_RELIEF_X1 = 0.65
+LAPTOP_RELIEF_Y0, LAPTOP_RELIEF_Y1 = 9.7, 34.7
 
 
 def run(_context: str):
@@ -105,6 +115,16 @@ def run(_context: str):
             adsk.core.Vector3D.create(0, 1, 0),
             abs(x1_mm - x0_mm) * MM, abs(y1_mm - y0_mm) * MM,
             abs(z1_mm - z0_mm) * MM))
+
+    side_wall = slab(SIDE_WALL_X0, SIDE_WALL_X1, SIDE_WALL_Y0, SIDE_WALL_Y1,
+                     SIDE_WALL_Z0, SIDE_WALL_Z1)
+    temp_mgr.booleanOperation(
+        combined, side_wall, adsk.fusion.BooleanTypes.UnionBooleanType)
+    laptop_relief = slab(-0.05, LAPTOP_RELIEF_X1,
+                         LAPTOP_RELIEF_Y0, LAPTOP_RELIEF_Y1,
+                         SIDE_WALL_Z0 - 0.1, SIDE_WALL_Z1 + 0.1)
+    temp_mgr.booleanOperation(
+        combined, laptop_relief, adsk.fusion.BooleanTypes.DifferenceBooleanType)
 
     for boss_y in BOSS_ROWS:
         if NUT_TRAP:
