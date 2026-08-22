@@ -1,0 +1,76 @@
+# Mini-Rack Laptop Trays
+
+1U sliding laptop trays for 10-inch mini racks, with an actively cooled, ducted rear exhaust — designed for a MacBook Pro 14" and a Surface Laptop 13.8" living in a GeeekPi/DeskPi RackMate-style 4U cabinet.
+
+![Rack mockup with both laptops](docs/images/rack-hero.png)
+
+Each laptop slides in and out like a drawer on four 8 mm smooth rods, held by 3D-printed ears on the front and rear rack rails. A printed fan bar with four 40 mm Noctua fans bolts onto the rear ears and pulls air across the top and bottom of the laptop, exhausting out the back — all within a single rack unit.
+
+## How it works
+
+| | |
+|---|---|
+| ![Rear fan bars and ducts](docs/images/rack-rear-fans.png) | ![Single tray assembly](docs/images/tray-detail.png) |
+
+- **Front and rear ears** print in mirrored pairs and bolt to the rack rails with standard rack screws. Each ear carries two 8 mm smooth-rod positions, spaced to leave a 24 mm gap — the laptop slides between the rod pairs and rests on the lower rods.
+- **The rear ears extend 67 mm out the back of the rack**, so the laptop's rear edge sits behind the rear rail and stops against the ears' back plates. A MacBook Pro 14 noses ~45 mm out the front; the Surface Laptop 13.8 ~33 mm.
+- **The fan bar** screws into heat-set inserts in the rear ears' back plates. Four Noctua NF-A4x20 5V fans (40 mm fits upright inside the 44.45 mm rack unit) exhaust rearward. Integrated 1.8 mm duct panels close the top and bottom of the rear overhang, so the fans can only draw air from inside the rack — sweeping the lid and the underside of the chassis on the way through. The ear frames themselves seal the sides.
+- Laptops run clamshell; all cables exit at the front (orient the Surface with its USB-C edge forward).
+
+## Compatibility
+
+Designed around a rack with 236.525 mm rail-hole span and 200 mm rail-to-rail depth (GeeekPi 4U 10-inch cabinet; see the [mini-rack project](https://mini-rack.jeffgeerling.com/) for the ecosystem).
+
+| Laptop | Dimensions (mm) | Fit |
+|---|---|---|
+| MacBook Pro 14 (M-series) | 312.6 × 221.2 × 15.5 | ✅ designed for |
+| Surface Laptop 7th Ed. 13.8" (Intel) | 301 × 220 × 17.5 | ✅ same parts, unchanged |
+
+Anything ≤ 222 mm deep and ≤ ~20 mm thick that can hang its side edges on rods 205.6 mm apart should work.
+
+## Bill of materials (per tray)
+
+**Printed parts** (PETG recommended — parts live next to a warm laptop):
+
+| Part | Qty | Notes |
+|---|---|---|
+| Front Ear | 2 | mirror one in the slicer |
+| Rear Ear v2 (`exports/rear_ear_v2.stl`) | 2 | mirror one; carries insert bosses |
+| Rear Fan Bar (`exports/rear_fan_bar.stl`) | 1 | prints flat, duct panels up, no supports |
+
+**Hardware:**
+
+| Item | Qty | Notes |
+|---|---|---|
+| 8 mm smooth rod, 275 mm | 4 | |
+| Noctua NF-A4x20 5V | 4 | ships with OmniJoin + fan screws |
+| M3 × 3 mm heat-set inserts (short) | 4 | e.g. CNC Kitchen; Ø4.0 × 3.2 pockets |
+| M3 × 8 socket-head screws | 4 | |
+| Rack screws | 8 | per your rack's rail standard |
+| USB power for fans | 1 | 5 V lead + splitter (one can feed both trays) |
+
+## Assembly
+
+1. Print the parts; heat-set the four inserts into the rear ear bosses.
+2. Mount front ears to the front rails, rear ears to the rear rails (rear ears point out the back of the rack).
+3. Slide the four rods through the front ears into the rear ears' sockets.
+4. Screw the fans to the rear face of the fan bar (labels facing back — they exhaust rearward), then drive the M3 screws through the bar's counterbored tabs into the ear inserts.
+5. Wire the fans to 5 V USB and slide the laptop in, lid closed, cables at the front.
+
+Total stack behind the rear rail is ~96 mm (ears 69 + pads 3 + bar 4 + fans 20) — leave that much clearance behind the rack.
+
+## CAD
+
+Models are built in Fusion 360, driven by the Python scripts in [`scripts/`](scripts/) (run inside Fusion — e.g. via a Fusion MCP add-in, or paste into a Fusion script). Each script is parametric through the constants at the top and regenerates its part from scratch:
+
+- [`build_rear_ear_v2.py`](scripts/build_rear_ear_v2.py) — copies the proven rear ear bodies and adds the insert bosses
+- [`build_rear_fan_bar.py`](scripts/build_rear_fan_bar.py) — the ducted fan bar
+- [`build_rack_mockup.py`](scripts/build_rack_mockup.py) — the full-rack mockup used for the renders on this page
+
+Fusion API note: all API lengths are centimeters; the scripts define `MM = 0.1` and work in millimeters throughout.
+
+The original ear and reference-body designs live in the Fusion archives (`*.f3d`) at the repo root.
+
+## License
+
+TBD

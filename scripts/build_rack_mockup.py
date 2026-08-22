@@ -105,14 +105,44 @@ def run(_context: str):
 
     bodies = []  # (name, temp brep body)
 
-    # --- Rack frame (simplified) ---
-    bodies.append(("Frame bottom", box(-127, 127, -12, 0, -2, 202)))
-    bodies.append(("Frame top", box(-127, 127, 4 * RU, 4 * RU + 12, -2, 202)))
+    # --- Rack frame (GeeekPi-style: corner extrusions, open frames, feet) ---
+    FRAME_Y0, FRAME_Y1 = -12.0, 4 * RU + 12.0
+    HOLE_ROWS_PER_U = (6.35, 22.225, 38.1)
+
     for side in (-1, 1):
-        bodies.append(("Front post %+d" % side,
-                       box(side * 107, side * 127, -12, 4 * RU + 12, 0, 20)))
-        bodies.append(("Rear post %+d" % side,
-                       box(side * 107, side * 127, -12, 4 * RU + 12, 180, 200)))
+        for z_range, tag in (((0.0, 20.0), "front"), ((180.0, 200.0), "rear")):
+            post = box(side * 107, side * 127, FRAME_Y0, FRAME_Y1,
+                       z_range[0], z_range[1])
+            # Mounting hole strip drilled through the post face
+            for u in range(4):
+                for row in HOLE_ROWS_PER_U:
+                    hole = cyl_z(side * (236.525 / 2), u * RU + row,
+                                 z_range[0] - 1, z_range[1] + 1, 5.0)
+                    temp_mgr.booleanOperation(
+                        post, hole,
+                        adsk.fusion.BooleanTypes.DifferenceBooleanType)
+            bodies.append(("Frame %s post %+d" % (tag, side), post))
+
+    for y_range, tag in (((FRAME_Y0, 0.0), "bottom"), ((4 * RU, FRAME_Y1), "top")):
+        bodies.append(("Frame %s front rail" % tag,
+                       box(-107, 107, y_range[0], y_range[1], 0, 20)))
+        bodies.append(("Frame %s rear rail" % tag,
+                       box(-107, 107, y_range[0], y_range[1], 180, 200)))
+        for side in (-1, 1):
+            bodies.append(("Frame %s side rail %+d" % (tag, side),
+                           box(side * 107, side * 127, y_range[0], y_range[1],
+                               20, 180)))
+
+    for side_x in (-1, 1):
+        for foot_z in (10.0, 190.0):
+            foot = temp_mgr.createCylinderOrCone(
+                adsk.core.Point3D.create(side_x * 117 * MM, (FRAME_Y0 - 8) * MM,
+                                         foot_z * MM),
+                12.0 * MM,
+                adsk.core.Point3D.create(side_x * 117 * MM, FRAME_Y0 * MM,
+                                         foot_z * MM),
+                12.0 * MM)
+            bodies.append(("Frame foot", foot))
 
     # --- Per-slot tray assemblies ---
     for slot in SLOTS:
@@ -207,10 +237,58 @@ def run(_context: str):
     design = adsk.fusion.Design.cast(app.activeProduct)
     design.designType = adsk.fusion.DesignTypes.DirectDesignType
     root = design.rootComponent
+
+    # --- Appearances ---
+    library = app.materialLibraries.itemByName("Fusion Appearance Library")
+
+    def get_appearance(lib_name, local_name, rgb=None):
+        existing = design.appearances.itemByName(local_name)
+        if existing:
+            return existing
+        source = library.appearances.itemByName(lib_name)
+        copied = design.appearances.addByCopy(source, local_name)
+        if rgb is not None:
+            # Appearances can carry several ColorProperties (e.g. anodized
+            # metals tint via the second one) — set them all.
+            for i in range(copied.appearanceProperties.count):
+                prop = copied.appearanceProperties.item(i)
+                if prop.name == "Color" and prop.objectType.endswith("ColorProperty"):
+                    prop.value = adsk.core.Color.create(rgb[0], rgb[1], rgb[2], 255)
+        return copied
+
+    aluminum = get_appearance("Aluminum - Anodized Glossy (Grey)", "Rack Aluminum",
+                              rgb=(196, 199, 204))
+    black_print = get_appearance("Plastic - Matte (Black)", "PETG Black")
+    steel = get_appearance("Stainless Steel - Satin", "Rod Steel")
+    macbook_look = get_appearance("Paint - Enamel Glossy (Dark Grey)",
+                                  "MacBook Space Black", rgb=(45, 45, 48))
+    surface_look = get_appearance("Paint - Enamel Glossy (Black)",
+                                  "Surface Black", rgb=(25, 25, 27))
+    noctua = get_appearance("Plastic - Matte (Black)", "Noctua Brown",
+                            rgb=(94, 61, 48))
+    rubber = get_appearance("Plastic - Matte (Black)", "Rubber Foot",
+                            rgb=(20, 20, 20))
+
+    def pick_appearance(name):
+        if "foot" in name:
+            return rubber
+        if name.startswith("Frame"):
+            return aluminum
+        if "MacBook" in name and "REF" in name:
+            return macbook_look
+        if "Surface" in name and "REF" in name:
+            return surface_look
+        if name.endswith("rod"):
+            return steel
+        if name.endswith("fan"):
+            return noctua
+        return black_print  # printed parts: ears, fan bars
+
     for name, body in bodies:
         temp_mgr.transform(body, world)
         added = root.bRepBodies.add(body)
         added.name = name
+        added.appearance = pick_appearance(name)
 
     app.activeViewport.fit()
     print("Mockup created: %d bodies in document '%s'" % (
