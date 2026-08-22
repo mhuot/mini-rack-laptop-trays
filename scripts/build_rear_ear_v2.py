@@ -30,12 +30,23 @@ RIB_WIDTH = 9.0
 RIB_Y_MIN = 0.4
 RIB_Y_MAX = 44.05
 RIB_Z_START = 69.0
-RIB_Z_END = 72.0
 # Heat-set variant (default): pocket for CNC Kitchen M3 x 3 short inserts.
 # Self-tap variant (no inserts): set INSERT_HOLE_DIA = 2.5 and
 # INSERT_HOLE_DEPTH = 4.7 — the M3 screw thread-forms into the PETG.
+# Nut-trap variant (no inserts, metal threads): set NUT_TRAP = True — the
+# rib grows to 5 mm proud and each boss gets a side-loading slot for a
+# standard M3 hex nut (a DIN 562 square nut fits the same slot). The fan
+# bar sits 2 mm further back; the same M3 x 8 screws work, with a relief
+# bore so the screw tip stops well short of the laptop-facing plate.
+NUT_TRAP = False
+RIB_Z_END = 74.0 if NUT_TRAP else 72.0
 INSERT_HOLE_DIA = 4.0
 INSERT_HOLE_DEPTH = 3.2
+SCREW_CLEAR_DIA = 3.4
+NUT_SLOT_WIDTH = 5.7          # grips the 5.5 across-flats of an M3 nut
+NUT_SLOT_Z0, NUT_SLOT_Z1 = 69.4, 72.1
+NUT_SLOT_X0, NUT_SLOT_X1 = -12.1, -4.6  # opens at the rib's inboard face
+SCREW_RELIEF_Z0 = 68.0        # leaves 1 mm of wall before the plate face
 
 
 def run(_context: str):
@@ -84,11 +95,37 @@ def run(_context: str):
         (RIB_Z_END - RIB_Z_START) * MM))
     temp_mgr.booleanOperation(
         combined, rib, adsk.fusion.BooleanTypes.UnionBooleanType)
+    def slab(x0_mm, x1_mm, y0_mm, y1_mm, z0_mm, z1_mm):
+        center = adsk.core.Point3D.create(
+            (x0_mm + x1_mm) / 2 * MM, (y0_mm + y1_mm) / 2 * MM,
+            (z0_mm + z1_mm) / 2 * MM)
+        return temp_mgr.createBox(adsk.core.OrientedBoundingBox3D.create(
+            center,
+            adsk.core.Vector3D.create(1, 0, 0),
+            adsk.core.Vector3D.create(0, 1, 0),
+            abs(x1_mm - x0_mm) * MM, abs(y1_mm - y0_mm) * MM,
+            abs(z1_mm - z0_mm) * MM))
+
     for boss_y in BOSS_ROWS:
-        pocket = cylinder(BOSS_X, boss_y, RIB_Z_END - INSERT_HOLE_DEPTH,
-                          RIB_Z_END + 0.1, INSERT_HOLE_DIA)
-        temp_mgr.booleanOperation(
-            combined, pocket, adsk.fusion.BooleanTypes.DifferenceBooleanType)
+        if NUT_TRAP:
+            screw_hole = cylinder(BOSS_X, boss_y, SCREW_RELIEF_Z0,
+                                  RIB_Z_END + 0.1, SCREW_CLEAR_DIA)
+            temp_mgr.booleanOperation(
+                combined, screw_hole,
+                adsk.fusion.BooleanTypes.DifferenceBooleanType)
+            nut_slot = slab(NUT_SLOT_X0, NUT_SLOT_X1,
+                            boss_y - NUT_SLOT_WIDTH / 2,
+                            boss_y + NUT_SLOT_WIDTH / 2,
+                            NUT_SLOT_Z0, NUT_SLOT_Z1)
+            temp_mgr.booleanOperation(
+                combined, nut_slot,
+                adsk.fusion.BooleanTypes.DifferenceBooleanType)
+        else:
+            pocket = cylinder(BOSS_X, boss_y, RIB_Z_END - INSERT_HOLE_DEPTH,
+                              RIB_Z_END + 0.1, INSERT_HOLE_DIA)
+            temp_mgr.booleanOperation(
+                combined, pocket,
+                adsk.fusion.BooleanTypes.DifferenceBooleanType)
 
     new_doc = app.documents.add(adsk.core.DocumentTypes.FusionDesignDocumentType)
     new_design = adsk.fusion.Design.cast(app.activeProduct)

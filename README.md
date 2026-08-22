@@ -43,7 +43,12 @@ Anything ≤ 222 mm deep and ≤ ~20 mm thick that can hang its side edges on ro
 | Rear Ear v2 (`exports/rear_ear_v2.stl`) | 2 | mirror one; bosses take M3 heat-set inserts |
 | Rear Fan Bar (`exports/rear_fan_bar.stl`) | 1 | prints flat, duct panels up, no supports |
 
-No heat-set inserts on hand? Print `exports/rear_ear_v2_selftap.stl` instead — same part with Ø2.5 pilot holes that the M3 screws thread directly into the plastic. Good for roughly a dozen assembly cycles; the insert version is the durable choice.
+No heat-set inserts on hand? Two alternatives, same fan bar and M3 × 8 screws either way:
+
+- **Nut-trap** (`exports/rear_ear_v2_nuttrap.stl`) — a slightly taller rib with side-loading slots that capture standard **M3 hex nuts** (a DIN 562 square nut fits the same slot). Metal threads, unlimited assembly cycles, hardware you already have. The fan bar sits 2 mm further back (~98 mm total behind the rear rail).
+- **Self-tap** (`exports/rear_ear_v2_selftap.stl`) — Ø2.5 pilot holes the M3 screws thread directly into the plastic. Simplest, but good for only about a dozen assembly cycles.
+
+The insert version remains the most compact and the nicest to work on.
 
 **Hardware:**
 
@@ -53,6 +58,7 @@ No heat-set inserts on hand? Print `exports/rear_ear_v2_selftap.stl` instead —
 | [Noctua NF-A4x20 5V](https://www.amazon.com/Noctua-NF-A4x20-5V-3-Pin-Premium/dp/B072Q3CMRW) | 4 | ships with OmniJoin + fan screws |
 | [M3 × 3 mm heat-set inserts (short)](https://cnckitchenus.store/products/heat-set-insert-m3-x-3-short-version-100-pieces) | 4 | e.g. CNC Kitchen; Ø4.0 × 3.2 pockets (skip for the self-tap ear variant) |
 | M3 × 8 socket-head screws | 4 | |
+| M3 hex nuts | 4 | nut-trap ear variant only |
 | Rack screws | 8 | per your rack's rail standard |
 | USB power for fans | 1 | 5 V lead + splitter (one can feed both trays) |
 
