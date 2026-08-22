@@ -2,3 +2,4 @@
 *.stl.bak
 *.gcode
 *.3mf
+private/
