@@ -35,6 +35,7 @@ PALETTE = {
     "surface": (28, 28, 30, 255),
     "fan": (94, 61, 48, 255),
     "print": (247, 84, 3, 255),  # Prusament Prusa Orange
+    "panel": (40, 40, 46, 90),   # smoked acrylic, alpha-blended
 }
 
 METALLIC = {"frame": 0.6, "rod": 0.6}
@@ -44,6 +45,8 @@ ROUGHNESS = {"rod": 0.35}
 def classify(stem: str) -> str:
     """Map an exported body filename to a palette group."""
     lower = stem.lower()
+    if "panel" in lower:
+        return "panel"
     if "foot" in lower:
         return "foot"
     if lower.split("_", 1)[-1].startswith("frame"):
@@ -101,6 +104,7 @@ def build_glb(parts_dir: Path) -> None:
                 baseColorFactor=srgb_to_linear(PALETTE[group]),
                 metallicFactor=METALLIC.get(group, 0.1),
                 roughnessFactor=ROUGHNESS.get(group, 0.6),
+                alphaMode="BLEND" if group == "panel" else "OPAQUE",
             ))
         scene.add_geometry(mesh, node_name=stl_path.stem)
     if not counts:

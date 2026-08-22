@@ -147,6 +147,14 @@ def run(_context: str):
                            box(side * POST_X_INNER, side * 127, y_range[0], y_range[1],
                                20, 180)))
 
+    # Side panels + top cover (the RackMate T0's sides and top are closed
+    # with smoked acrylic)
+    for side in (-1, 1):
+        bodies.append(("Side panel %+d" % side,
+                       box(side * 125, side * 127, 0, 4 * RU, 20, 180)))
+    bodies.append(("Top panel",
+                   box(-POST_X_INNER, POST_X_INNER, 4 * RU, 4 * RU + 3, 20, 180)))
+
     for side_x in (-1, 1):
         for foot_z in (10.0, 190.0):
             foot = temp_mgr.createCylinderOrCone(
@@ -286,8 +294,12 @@ def run(_context: str):
                             rgb=(94, 61, 48))
     rubber = get_appearance("Plastic - Matte (Black)", "Rubber Foot",
                             rgb=(20, 20, 20))
+    acrylic = get_appearance("Plastic - Translucent Matte (Gray)",
+                             "Smoked Acrylic", rgb=(40, 40, 46))
 
     def pick_appearance(name):
+        if "panel" in name:
+            return acrylic
         if "foot" in name:
             return rubber
         if name.startswith("Frame"):
@@ -307,6 +319,8 @@ def run(_context: str):
         added = root.bRepBodies.add(body)
         added.name = name
         added.appearance = pick_appearance(name)
+        if "panel" in name.lower():
+            added.opacity = 0.3  # smoked acrylic reads see-through in renders
 
     app.activeViewport.fit()
     print("Mockup created: %d bodies in document '%s'" % (

@@ -20,6 +20,7 @@ Want to spin it yourself? **[Open the interactive 3D viewer](https://mhuot.githu
 - **The rear ears extend 67 mm out the back of the rack**, so the laptop's rear edge sits behind the rear rail and stops against the ears' back plates. A MacBook Pro 14 noses ~45 mm out the front; the Surface Laptop 13.8 ~33 mm.
 - **The fan bar** screws into heat-set inserts in the rear ears' back plates. Four Noctua NF-A4x20 5V fans (40 mm fits upright inside the 44.45 mm rack unit) exhaust rearward. Integrated 1.8 mm duct panels close the top and bottom of the rear overhang, so the fans can only draw air from inside the rack — sweeping the lid and the underside of the chassis on the way through. The ear frames themselves seal the sides.
 - Laptops run clamshell; all cables exit at the front (orient the Surface with its USB-C edge forward).
+- The RackMate-style cabinet has closed acrylic sides and top, so the front opening is the only intake: the fans drive true front-to-back flow through the slot, and the hinge-side exhaust is entrained in the same rearward stream. No side baffles needed.
 
 ## Compatibility
 
