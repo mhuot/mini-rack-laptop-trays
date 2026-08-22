@@ -28,11 +28,17 @@ ROD_X = 102.82
 EAR_OFFSET_X = 110.32   # ear local x=0 -> global (rod line 102.82 = local -7.5)
 ROD_ROWS = (6.22, 38.23)
 ROD_DIA = 8.0
-# Rods (243 mm, per the as-built trays) connect the ears: flush with the
-# front ear's front face (z=-8), through the rack, landing ~35 mm into the
-# rear ears' bores (z=235). They neither reach the rear back plates nor
-# extend past the front; the laptop's front overhang is cantilevered.
-ROD_Z0, ROD_Z1 = -8.0, 235.0
+# The front ear straddles the front rail: its thin 2 mm face plate sits ON
+# the rail's front face (screw heads recessed in it), while the rod blocks
+# (6 mm deeper) pass through the rack opening inboard of the rail. Only
+# that 2 mm plate is proud of the rack; the laptop overhang is cantilevered.
+RAIL_PLATE = 3.0
+EAR_PLATE = 2.0
+FRONT_EAR_Z = -EAR_PLATE          # ear body: z -2..6
+POST_X_INNER = 110.5              # rail plates sit outboard of the ear blocks
+# Rods (243 mm, per the as-built trays) run from flush with the front
+# ear's face (z=-2) to ~41 mm inside the rear ears' bores (z=241).
+ROD_Z0, ROD_Z1 = -EAR_PLATE, -EAR_PLATE + 243.0
 
 BAR_Z0, BAR_Z1 = 272.0, 276.0
 FAN_CENTERS_X = (-72.0, -24.0, 24.0, 72.0)
@@ -113,9 +119,13 @@ def run(_context: str):
     FRAME_Y0, FRAME_Y1 = -12.0, 4 * RU + 12.0
     HOLE_ROWS_PER_U = (6.35, 22.225, 38.1)
 
+    # Mounting rails are thin face plates (like the real extrusion faces):
+    # front plate at z 0..3 (ears nest behind it), rear plate at 197..200
+    # (rear ears mount on its back face at z=200).
     for side in (-1, 1):
-        for z_range, tag in (((0.0, 20.0), "front"), ((180.0, 200.0), "rear")):
-            post = box(side * 107, side * 127, FRAME_Y0, FRAME_Y1,
+        for z_range, tag in (((0.0, RAIL_PLATE), "front"),
+                             ((200.0 - RAIL_PLATE, 200.0), "rear")):
+            post = box(side * POST_X_INNER, side * 127, FRAME_Y0, FRAME_Y1,
                        z_range[0], z_range[1])
             # Mounting hole strip drilled through the post face
             for u in range(4):
@@ -129,12 +139,12 @@ def run(_context: str):
 
     for y_range, tag in (((FRAME_Y0, 0.0), "bottom"), ((4 * RU, FRAME_Y1), "top")):
         bodies.append(("Frame %s front rail" % tag,
-                       box(-107, 107, y_range[0], y_range[1], 0, 20)))
+                       box(-POST_X_INNER, POST_X_INNER, y_range[0], y_range[1], 0, 20)))
         bodies.append(("Frame %s rear rail" % tag,
-                       box(-107, 107, y_range[0], y_range[1], 180, 200)))
+                       box(-POST_X_INNER, POST_X_INNER, y_range[0], y_range[1], 180, 200)))
         for side in (-1, 1):
             bodies.append(("Frame %s side rail %+d" % (tag, side),
-                           box(side * 107, side * 127, y_range[0], y_range[1],
+                           box(side * POST_X_INNER, side * 127, y_range[0], y_range[1],
                                20, 180)))
 
     for side_x in (-1, 1):
@@ -153,12 +163,12 @@ def run(_context: str):
         y0 = slot["u_bottom"]
         label = slot["label"]
 
-        # Front ears: local z 0..8 -> global -8..0
+        # Front ears straddle the rail: local z 0..8 -> global -2..6
         for side, tx in (("R", EAR_OFFSET_X), ("L", -EAR_OFFSET_X)):
             sign = 1 if side == "R" else -1
             m = matrix([[sign, 0, 0, sign * EAR_OFFSET_X],
                         [0, 1, 0, y0],
-                        [0, 0, 1, -8.0]])
+                        [0, 0, 1, FRONT_EAR_Z]])
             bodies.append(("%s front ear %s" % (label, side),
                            placed(front_ear_src, m)))
 
