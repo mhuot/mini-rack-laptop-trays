@@ -28,10 +28,11 @@ ROD_X = 102.82
 EAR_OFFSET_X = 110.32   # ear local x=0 -> global (rod line 102.82 = local -7.5)
 ROD_ROWS = (6.22, 38.23)
 ROD_DIA = 8.0
-# Rods (275 mm) exactly span the ears: front face of the front ear (z=-8)
-# to the rear ears' back plates (z=267). They do not extend past the ears;
-# the laptop's front overhang is cantilevered.
-ROD_Z0, ROD_Z1 = -8.0, 267.0
+# Rods (243 mm, per the as-built trays) connect the ears: flush with the
+# front ear's front face (z=-8), through the rack, landing ~35 mm into the
+# rear ears' bores (z=235). They neither reach the rear back plates nor
+# extend past the front; the laptop's front overhang is cantilevered.
+ROD_Z0, ROD_Z1 = -8.0, 235.0
 
 BAR_Z0, BAR_Z1 = 272.0, 276.0
 FAN_CENTERS_X = (-72.0, -24.0, 24.0, 72.0)
