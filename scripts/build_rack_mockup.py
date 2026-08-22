@@ -32,7 +32,6 @@ ROD_DIA = 8.0
 # the rail's front face (screw heads recessed in it), while the rod blocks
 # (6 mm deeper) pass through the rack opening inboard of the rail. Only
 # that 2 mm plate is proud of the rack; the laptop overhang is cantilevered.
-RAIL_PLATE = 3.0
 EAR_PLATE = 2.0
 FRONT_EAR_Z = -EAR_PLATE          # ear body: z -2..6
 POST_X_INNER = 110.5              # rail plates sit outboard of the ear blocks
@@ -119,12 +118,12 @@ def run(_context: str):
     FRAME_Y0, FRAME_Y1 = -12.0, 4 * RU + 12.0
     HOLE_ROWS_PER_U = (6.35, 22.225, 38.1)
 
-    # Mounting rails are thin face plates (like the real extrusion faces):
-    # front plate at z 0..3 (ears nest behind it), rear plate at 197..200
-    # (rear ears mount on its back face at z=200).
+    # Corner posts are full-depth extrusions like the real rack. The front
+    # ears need no clearance behind the rail here: their plates sit in front
+    # of the rail face and their rod blocks pass through the opening inboard
+    # of the posts (|x| < POST_X_INNER).
     for side in (-1, 1):
-        for z_range, tag in (((0.0, RAIL_PLATE), "front"),
-                             ((200.0 - RAIL_PLATE, 200.0), "rear")):
+        for z_range, tag in (((0.0, 20.0), "front"), ((180.0, 200.0), "rear")):
             post = box(side * POST_X_INNER, side * 127, FRAME_Y0, FRAME_Y1,
                        z_range[0], z_range[1])
             # Mounting hole strip drilled through the post face
@@ -146,16 +145,6 @@ def run(_context: str):
             bodies.append(("Frame %s side rail %+d" % (tag, side),
                            box(side * POST_X_INNER, side * 127, y_range[0], y_range[1],
                                20, 180)))
-
-    # Corner blocks: the posts' mounting faces are thin (3 mm) so the ears
-    # can nest behind them, but the real corner extrusions are full depth.
-    # Fill the joint voids behind the plates at the top/bottom frame bands.
-    for side in (-1, 1):
-        for z0, z1 in ((RAIL_PLATE, 20.0), (180.0, 200.0 - RAIL_PLATE)):
-            for band_y0, band_y1 in ((FRAME_Y0, 0.0), (4 * RU, FRAME_Y1)):
-                bodies.append(("Frame corner block",
-                               box(side * POST_X_INNER, side * 127,
-                                   band_y0, band_y1, z0, z1)))
 
     # Side panels + top cover (the RackMate T0's sides and top are closed
     # with smoked acrylic)
