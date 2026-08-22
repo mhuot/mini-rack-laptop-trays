@@ -15,6 +15,12 @@ Design intent (all values in mm):
   (40x40x20, 32 mm screw pitch) nest between them, exhausting rearward.
 - Bar front face lands on the ear bosses' 3 mm pads; total stack behind the
   rear rail = 69 (ear) + 3 (pad) + 4 (bar) + 20 (fan) = 96 mm.
+- Integrated duct shell: 1.8 mm top and bottom panels project 70 mm forward
+  from the bar face, spanning between the ear inner faces (x = +/-95.3) and
+  stopping 2 mm shy of the rear rail. With the ear frames closing the sides,
+  the fans can only draw air from inside the rack — through the channels
+  above the lid and under the chassis — instead of short-circuiting from
+  the open air around the rear overhang.
 """
 
 import adsk.core
@@ -34,6 +40,11 @@ BOSS_ROWS = (15.0, 29.45)  # symmetric about U mid-height 22.225, clear of rod b
 SCREW_CLEAR_DIA = 3.4
 HEAD_CBORE_DIA = 6.5
 HEAD_CBORE_DEPTH = 2.0
+
+# Duct shell panels (close the top/bottom leak paths of the rear overhang)
+DUCT_LENGTH = 70.0        # forward projection; ends 2 mm shy of the rear rail
+DUCT_WALL = 1.8
+DUCT_X_HALF_SPAN = 94.8   # 0.5 mm clear of the ear inner faces at +/-95.3
 
 # Fans: Noctua NF-A4x20 5V
 FAN_CENTERS_X = (-72.0, -24.0, 24.0, 72.0)
@@ -88,7 +99,21 @@ def run(_context: str):
         False, adsk.core.ValueInput.createByReal(PLATE_THICKNESS * MM))
     extrudes.add(through_cut)
 
-    # 3. Counterbores for the M3 screw heads, cut from the rear face
+    # 3. Duct shell: top/bottom panels extruded forward (join) from the bar face
+    duct_sketch = root.sketches.add(root.xYConstructionPlane)
+    duct_sketch.sketchCurves.sketchLines.addTwoPointRectangle(
+        point(-DUCT_X_HALF_SPAN, BAR_Y_MAX - DUCT_WALL),
+        point(DUCT_X_HALF_SPAN, BAR_Y_MAX))
+    duct_sketch.sketchCurves.sketchLines.addTwoPointRectangle(
+        point(-DUCT_X_HALF_SPAN, BAR_Y_MIN),
+        point(DUCT_X_HALF_SPAN, BAR_Y_MIN + DUCT_WALL))
+    duct_join = extrudes.createInput(
+        all_profiles(duct_sketch), adsk.fusion.FeatureOperations.JoinFeatureOperation)
+    duct_join.setDistanceExtent(
+        False, adsk.core.ValueInput.createByReal(-DUCT_LENGTH * MM))
+    extrudes.add(duct_join)
+
+    # 4. Counterbores for the M3 screw heads, cut from the rear face
     planes = root.constructionPlanes
     plane_input = planes.createInput()
     plane_input.setByOffset(
