@@ -57,6 +57,13 @@ SIDE_WALL_Y0, SIDE_WALL_Y1 = 0.0, 44.45
 SIDE_WALL_Z0, SIDE_WALL_Z1 = 0.0, 67.0
 LAPTOP_RELIEF_X1 = 0.65
 LAPTOP_RELIEF_Y0, LAPTOP_RELIEF_Y1 = 9.7, 34.7
+# The stock ear's rod bores are exactly tangent to the laptop slot faces
+# (rod center 6.22/38.23 + r4 = faces at 10.22/34.23), which produces
+# non-manifold edges that slicers report as open. Relieving the slot faces
+# 0.12 mm in the rod band makes the intersections transversal; the laptop
+# rides on the rods either way.
+TANGENCY_X0, TANGENCY_X1 = -12.5, -2.5
+TANGENCY_Y0, TANGENCY_Y1 = 10.10, 34.35
 
 
 def run(_context: str):
@@ -115,6 +122,12 @@ def run(_context: str):
             adsk.core.Vector3D.create(0, 1, 0),
             abs(x1_mm - x0_mm) * MM, abs(y1_mm - y0_mm) * MM,
             abs(z1_mm - z0_mm) * MM))
+
+    tangency_relief = slab(TANGENCY_X0, TANGENCY_X1,
+                           TANGENCY_Y0, TANGENCY_Y1, -1.0, 67.0)
+    temp_mgr.booleanOperation(
+        combined, tangency_relief,
+        adsk.fusion.BooleanTypes.DifferenceBooleanType)
 
     side_wall = slab(SIDE_WALL_X0, SIDE_WALL_X1, SIDE_WALL_Y0, SIDE_WALL_Y1,
                      SIDE_WALL_Z0, SIDE_WALL_Z1)
