@@ -179,10 +179,12 @@ def run(_context: str):
                         [0, 1, 0, y0],
                         [0, 0, 1, RAIL_DEPTH]])
             ear = placed(rear_ear_src, m)
+            # Full-height boss rib seals the plate-to-bar standoff gap
+            rib = box(sign * ROD_X - 4.5, sign * ROD_X + 4.5,
+                      y0 + 0.4, y0 + 44.05, 269.0, 272.0)
+            temp_mgr.booleanOperation(
+                ear, rib, adsk.fusion.BooleanTypes.UnionBooleanType)
             for row in (15.0, 29.45):
-                pad = cyl_z(sign * ROD_X, y0 + row, 269.0, 272.0, 9.0)
-                temp_mgr.booleanOperation(
-                    ear, pad, adsk.fusion.BooleanTypes.UnionBooleanType)
                 pocket = cyl_z(sign * ROD_X, y0 + row, 268.8, 272.1, 4.0)
                 temp_mgr.booleanOperation(
                     ear, pocket, adsk.fusion.BooleanTypes.DifferenceBooleanType)

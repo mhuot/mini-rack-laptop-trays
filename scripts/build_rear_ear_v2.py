@@ -6,11 +6,14 @@ fuses them, and adds two bosses on the back plate's rear face sized for CNC
 Kitchen M3 x 3 SHORT heat-set inserts (hole diameter 4.0, depth 3.2). The
 result lands in a new unsaved direct-modeling document as one printable body.
 
-Boss positions (ear coordinates, mm): x = -7.5 (rod line), y = 14.0 and
-30.45 — symmetric about the 1U mid-height (22.225) and clear of the 8 mm rod
-sockets at y 6.22 / 38.23. Pads are diameter 9 x 3 tall on the plate rear
-face (z = 69..72); insert pockets are blind, leaving 1.8 mm of plate in
-front so nothing pokes the laptop's rear edge.
+The bosses live in a single full-height rib (9 wide x 3 proud, z = 69..72)
+running down the plate's rear face on the rod line (x = -7.5). The rib
+lands the fan bar at the same 3 mm standoff as the earlier round pads but
+seals the side gap between the back plate and the bar, so the duct can't
+draw leak air around the plate edges. Insert pockets sit at y = 15.0 and
+29.45 — symmetric about the 1U mid-height (22.225), clear of the 8 mm rod
+holes — and are blind, leaving 1.8 mm of plate in front so nothing pokes
+the laptop's rear edge.
 """
 
 import adsk.core
@@ -23,9 +26,11 @@ SOURCE_BODIES = ("Rear Ear", "Back Plate")
 
 BOSS_X = -7.5
 BOSS_ROWS = (15.0, 29.45)
-PAD_DIA = 9.0
-PAD_Z_START = 69.0
-PAD_Z_END = 72.0
+RIB_WIDTH = 9.0
+RIB_Y_MIN = 0.4
+RIB_Y_MAX = 44.05
+RIB_Z_START = 69.0
+RIB_Z_END = 72.0
 # Heat-set variant (default): pocket for CNC Kitchen M3 x 3 short inserts.
 # Self-tap variant (no inserts): set INSERT_HOLE_DIA = 2.5 and
 # INSERT_HOLE_DEPTH = 4.7 — the M3 screw thread-forms into the PETG.
@@ -68,13 +73,20 @@ def run(_context: str):
             adsk.core.Point3D.create(x_mm * MM, y_mm * MM, z1_mm * MM),
             dia_mm / 2 * MM)
 
+    rib_center = adsk.core.Point3D.create(
+        BOSS_X * MM, (RIB_Y_MIN + RIB_Y_MAX) / 2 * MM,
+        (RIB_Z_START + RIB_Z_END) / 2 * MM)
+    rib = temp_mgr.createBox(adsk.core.OrientedBoundingBox3D.create(
+        rib_center,
+        adsk.core.Vector3D.create(1, 0, 0),
+        adsk.core.Vector3D.create(0, 1, 0),
+        RIB_WIDTH * MM, (RIB_Y_MAX - RIB_Y_MIN) * MM,
+        (RIB_Z_END - RIB_Z_START) * MM))
+    temp_mgr.booleanOperation(
+        combined, rib, adsk.fusion.BooleanTypes.UnionBooleanType)
     for boss_y in BOSS_ROWS:
-        pad = cylinder(BOSS_X, boss_y, PAD_Z_START, PAD_Z_END, PAD_DIA)
-        temp_mgr.booleanOperation(
-            combined, pad, adsk.fusion.BooleanTypes.UnionBooleanType)
-    for boss_y in BOSS_ROWS:
-        pocket = cylinder(BOSS_X, boss_y, PAD_Z_END - INSERT_HOLE_DEPTH,
-                          PAD_Z_END + 0.1, INSERT_HOLE_DIA)
+        pocket = cylinder(BOSS_X, boss_y, RIB_Z_END - INSERT_HOLE_DEPTH,
+                          RIB_Z_END + 0.1, INSERT_HOLE_DIA)
         temp_mgr.booleanOperation(
             combined, pocket, adsk.fusion.BooleanTypes.DifferenceBooleanType)
 
