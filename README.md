@@ -48,7 +48,7 @@ No heat-set inserts on hand? Print `exports/rear_ear_v2_selftap.stl` instead —
 
 | Item | Qty | Notes |
 |---|---|---|
-| 8 mm smooth rod | 4 | 2× 275 mm + 2× 320 mm — see [Smooth rods](#smooth-rods) |
+| 8 mm smooth rod, 275 mm | 4 | see [Smooth rods](#smooth-rods) |
 | Noctua NF-A4x20 5V | 4 | ships with OmniJoin + fan screws |
 | M3 × 3 mm heat-set inserts (short) | 4 | e.g. CNC Kitchen; Ø4.0 × 3.2 pockets (skip for the self-tap ear variant) |
 | M3 × 8 socket-head screws | 4 | |
@@ -59,11 +59,11 @@ No heat-set inserts on hand? Print `exports/rear_ear_v2_selftap.stl` instead —
 
 ![Side view: rod runs and laptop overhang](docs/images/rack-side.png)
 
-Any 8 mm smooth rod works (hardened steel or stainless linear rod is ideal — it's what the renders show). The geometry that sets the lengths:
+Any 8 mm smooth rod works (hardened steel or stainless linear rod is ideal — it's what the renders show). The rods are exactly long enough to connect the front and rear ears — they do **not** extend past the front:
 
 - Rods seat **267 mm** behind the front rail face, against the rear ears' back plates.
-- The front ears sit **entirely in front of the front rail** (they're 8 mm deep — the whole ear is proud of the rack, not just a mounting tab), so a rod cut to **275 mm** ends flush with the front ear's face.
-- The laptop overhangs the front ears (MacBook Pro 14: ~45 mm, Surface 13.8: ~33 mm). Cutting the **two lower rods to ~320 mm** runs them out under that overhang so the front lip is supported right to its edge — that's the recommended setup shown above. The **upper rods stay at 275 mm** (they only retain the laptop; no reason to extend them).
+- The front ears sit **entirely in front of the front rail** (they're 8 mm deep — the whole ear is proud of the rack, not just a mounting tab), so **cut all four rods to 275 mm** to end flush with the front ear's face.
+- The laptop's front overhang (MacBook Pro 14: ~45 mm, Surface 13.8: ~33 mm) is cantilevered past the front ears — the chassis is more than stiff enough for this.
 - Deburr and lightly chamfer the ends so they slide into the rear sockets without shaving the print.
 
 To install: slide each rod through its front ear bore, across the rack, and into the rear ear until it stops at the back plate. The bores are a snug 8.0 mm fit — no retention hardware needed, and the fan bar caps the rear ends once mounted.

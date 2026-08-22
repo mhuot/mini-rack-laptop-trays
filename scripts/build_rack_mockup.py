@@ -28,12 +28,10 @@ ROD_X = 102.82
 EAR_OFFSET_X = 110.32   # ear local x=0 -> global (rod line 102.82 = local -7.5)
 ROD_ROWS = (6.22, 38.23)
 ROD_DIA = 8.0
-# Rods seat against the rear ears' back plates (z=267). The upper pair cuts
-# flush with the front ear face (275 mm); the lower pair runs long (320 mm)
-# so ~45 mm extends past the front ears to support the laptop's overhang.
-ROD_Z1 = 267.0
-ROD_Z0_UPPER = -8.0
-ROD_Z0_LOWER = -53.0
+# Rods (275 mm) exactly span the ears: front face of the front ear (z=-8)
+# to the rear ears' back plates (z=267). They do not extend past the ears;
+# the laptop's front overhang is cantilevered.
+ROD_Z0, ROD_Z1 = -8.0, 267.0
 
 BAR_Z0, BAR_Z1 = 272.0, 276.0
 FAN_CENTERS_X = (-72.0, -24.0, 24.0, 72.0)
@@ -179,12 +177,11 @@ def run(_context: str):
                     ear, pocket, adsk.fusion.BooleanTypes.DifferenceBooleanType)
             bodies.append(("%s rear ear v2 %s" % (label, side), ear))
 
-        # Rods (lower pair extended forward under the laptop overhang)
+        # Rods
         for side in (-1, 1):
             for row in ROD_ROWS:
-                rod_z0 = ROD_Z0_LOWER if row == min(ROD_ROWS) else ROD_Z0_UPPER
                 bodies.append(("%s rod" % label,
-                               cyl_z(side * ROD_X, y0 + row, rod_z0, ROD_Z1,
+                               cyl_z(side * ROD_X, y0 + row, ROD_Z0, ROD_Z1,
                                      ROD_DIA)))
 
         # Ducted fan bar (visual: fan openings only, no small holes)
