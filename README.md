@@ -73,4 +73,4 @@ The original ear and reference-body designs live in the Fusion archives (`*.f3d`
 
 ## License
 
-TBD
+[MIT](LICENSE) — scripts, models, and STLs alike. Attribution appreciated but not required.
