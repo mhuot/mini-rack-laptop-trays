@@ -261,8 +261,9 @@ def run(_context: str):
 
     aluminum = get_appearance("Aluminum - Anodized Glossy (Grey)", "Rack Aluminum",
                               rgb=(196, 199, 204))
+    # Prusament Prusa Orange (#F75403)
     orange_print = get_appearance("Plastic - Matte (Black)", "PETG Orange",
-                                  rgb=(235, 110, 35))
+                                  rgb=(247, 84, 3))
     steel = get_appearance("Stainless Steel - Satin", "Rod Steel")
     macbook_look = get_appearance("Paint - Enamel Glossy (Dark Grey)",
                                   "MacBook Space Black", rgb=(45, 45, 48))
