@@ -24,7 +24,7 @@ Want to spin it yourself? **[Open the interactive 3D viewer](https://mhuot.githu
 
 ## Compatibility
 
-Designed around a rack with 236.525 mm rail-hole span and 200 mm rail-to-rail depth (GeeekPi 4U 10-inch cabinet; see the [mini-rack project](https://mini-rack.jeffgeerling.com/) for the ecosystem).
+Designed around a rack with 236.525 mm rail-hole span and 200 mm rail-to-rail depth ([GeeekPi 4U 10-inch cabinet / DeskPi RackMate T0](https://www.amazon.com/dp/B0DPGZPTPP); see the [mini-rack project](https://mini-rack.jeffgeerling.com/) for the ecosystem).
 
 | Laptop | Dimensions (mm) | Fit |
 |---|---|---|
@@ -50,8 +50,8 @@ No heat-set inserts on hand? Print `exports/rear_ear_v2_selftap.stl` instead —
 | Item | Qty | Notes |
 |---|---|---|
 | 8 mm smooth rod, 243 mm | 4 | see [Smooth rods](#smooth-rods) |
-| Noctua NF-A4x20 5V | 4 | ships with OmniJoin + fan screws |
-| M3 × 3 mm heat-set inserts (short) | 4 | e.g. CNC Kitchen; Ø4.0 × 3.2 pockets (skip for the self-tap ear variant) |
+| [Noctua NF-A4x20 5V](https://www.amazon.com/Noctua-NF-A4x20-5V-3-Pin-Premium/dp/B072Q3CMRW) | 4 | ships with OmniJoin + fan screws |
+| [M3 × 3 mm heat-set inserts (short)](https://cnckitchenus.store/products/heat-set-insert-m3-x-3-short-version-100-pieces) | 4 | e.g. CNC Kitchen; Ø4.0 × 3.2 pockets (skip for the self-tap ear variant) |
 | M3 × 8 socket-head screws | 4 | |
 | Rack screws | 8 | per your rack's rail standard |
 | USB power for fans | 1 | 5 V lead + splitter (one can feed both trays) |
