@@ -26,9 +26,9 @@ SOURCE_BODIES = ("Rear Ear", "Back Plate")
 
 BOSS_X = -7.5
 BOSS_ROWS = (15.0, 29.45)
-RIB_WIDTH = 9.0
-RIB_Y_MIN = 0.4
-RIB_Y_MAX = 44.05
+RIB_WIDTH = 15.0   # full plate face: one flat landing level at the rear
+RIB_Y_MIN = 0.0
+RIB_Y_MAX = 44.45
 RIB_Z_START = 69.0
 # Heat-set variant (default): pocket for CNC Kitchen M3 x 3 short inserts.
 # Self-tap variant (no inserts): set INSERT_HOLE_DIA = 2.5 and
@@ -45,7 +45,7 @@ INSERT_HOLE_DEPTH = 3.2
 SCREW_CLEAR_DIA = 3.4
 NUT_SLOT_WIDTH = 5.7          # grips the 5.5 across-flats of an M3 nut
 NUT_SLOT_Z0, NUT_SLOT_Z1 = 69.4, 72.1
-NUT_SLOT_X0, NUT_SLOT_X1 = -12.1, -4.6  # opens at the rib's inboard face
+NUT_SLOT_X0, NUT_SLOT_X1 = -15.1, -4.6  # opens at the pad's inboard face
 SCREW_RELIEF_Z0 = 68.0        # leaves 1 mm of wall before the plate face
 # Outboard side wall: the stock ear's outboard face is open behind the 2 mm
 # flange, exposing the duct interior to outside air. A 2 mm wall closes it,
@@ -54,7 +54,7 @@ SCREW_RELIEF_Z0 = 68.0        # leaves 1 mm of wall before the plate face
 # x = +0.28, so the wall clears it there).
 SIDE_WALL_X0, SIDE_WALL_X1 = 0.0, 2.0
 SIDE_WALL_Y0, SIDE_WALL_Y1 = 0.0, 44.45
-SIDE_WALL_Z0, SIDE_WALL_Z1 = 0.0, 67.0
+SIDE_WALL_Z0 = 0.0  # wall runs to the pad face (RIB_Z_END): no rear notch
 LAPTOP_RELIEF_X1 = 0.65
 LAPTOP_RELIEF_Y0, LAPTOP_RELIEF_Y1 = 9.7, 34.7
 # The stock ear's rod bores are exactly tangent to the laptop slot faces
@@ -130,7 +130,7 @@ def run(_context: str):
         adsk.fusion.BooleanTypes.DifferenceBooleanType)
 
     side_wall = slab(SIDE_WALL_X0, SIDE_WALL_X1, SIDE_WALL_Y0, SIDE_WALL_Y1,
-                     SIDE_WALL_Z0, SIDE_WALL_Z1)
+                     SIDE_WALL_Z0, RIB_Z_END)
     temp_mgr.booleanOperation(
         combined, side_wall, adsk.fusion.BooleanTypes.UnionBooleanType)
     laptop_relief = slab(-0.05, LAPTOP_RELIEF_X1,

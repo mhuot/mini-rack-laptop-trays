@@ -186,14 +186,14 @@ def run(_context: str):
                         [0, 1, 0, y0],
                         [0, 0, 1, RAIL_DEPTH]])
             ear = placed(rear_ear_src, m)
-            # Full-height boss rib seals the plate-to-bar standoff gap
-            rib = box(sign * ROD_X - 4.5, sign * ROD_X + 4.5,
-                      y0 + 0.4, y0 + 44.05, 269.0, 272.0)
+            # Full-face boss pad: one flat landing level for the fan bar
+            rib = box(sign * (EAR_OFFSET_X - 15.0), sign * EAR_OFFSET_X,
+                      y0, y0 + 44.45, 269.0, 272.0)
             temp_mgr.booleanOperation(
                 ear, rib, adsk.fusion.BooleanTypes.UnionBooleanType)
             # Outboard side wall closes the ear's open side window
             wall = box(sign * (EAR_OFFSET_X + 0.0), sign * (EAR_OFFSET_X + 2.0),
-                       y0, y0 + 44.45, 200.0, 267.0)
+                       y0, y0 + 44.45, 200.0, 272.0)
             temp_mgr.booleanOperation(
                 ear, wall, adsk.fusion.BooleanTypes.UnionBooleanType)
             relief = box(sign * (EAR_OFFSET_X - 0.05),
