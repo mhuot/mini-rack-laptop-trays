@@ -15,12 +15,13 @@ Design intent (all values in mm):
   (40x40x20, 32 mm screw pitch) nest between them, exhausting rearward.
 - Bar front face lands on the ear bosses' 3 mm pads; total stack behind the
   rear rail = 69 (ear) + 3 (pad) + 4 (bar) + 20 (fan) = 96 mm.
-- Integrated duct shell: 1.8 mm top and bottom panels project 70 mm forward
+- Integrated duct shell: 1.8 mm top and bottom panels project 72 mm forward
   from the bar face, spanning between the ear inner faces (x = +/-95.3) and
-  stopping 2 mm shy of the rear rail. With the ear frames closing the sides,
-  the fans can only draw air from inside the rack — through the channels
-  above the lid and under the chassis — instead of short-circuiting from
-  the open air around the rear overhang.
+  reaching the rear rail plane. The panels sit inboard of the ear flanges and
+  of the rack posts, so they run into the open 1U slot with nothing to foul.
+  With the ear frames closing the sides, the fans can only draw air from
+  inside the rack, through the channels above the lid and under the chassis,
+  instead of short-circuiting from the open air around the rear overhang.
 """
 
 import adsk.core
@@ -42,7 +43,7 @@ HEAD_CBORE_DIA = 6.5
 HEAD_CBORE_DEPTH = 2.0
 
 # Duct shell panels (close the top/bottom leak paths of the rear overhang)
-DUCT_LENGTH = 70.0        # forward projection; ends 2 mm shy of the rear rail
+DUCT_LENGTH = 72.0        # forward projection; reaches the rear rail plane
 DUCT_WALL = 1.8
 DUCT_X_HALF_SPAN = 94.8   # 0.5 mm clear of the ear inner faces at +/-95.3
 
