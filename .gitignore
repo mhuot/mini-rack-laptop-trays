@@ -2,4 +2,5 @@
 *.stl.bak
 *.gcode
 *.3mf
+!exports/*.3mf
 private/
