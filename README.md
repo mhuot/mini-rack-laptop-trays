@@ -97,7 +97,7 @@ Models are built in Fusion 360, driven by the Python scripts in [`scripts/`](scr
 
 Fusion API note: all API lengths are centimeters; the scripts define `MM = 0.1` and work in millimeters throughout.
 
-The original ear and reference-body designs live in the Fusion archives (`*.f3d`) at the repo root.
+Every printable part also ships as standalone CAD in [`cad/`](cad/) — a STEP and a Fusion archive (`.f3d`) per part, current revision, importable into any CAD package. The original parametric ear and reference-body designs live in the Fusion archives (`*.f3d`) at the repo root.
 
 ## License
 
