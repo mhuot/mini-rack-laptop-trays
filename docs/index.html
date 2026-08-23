@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mini-Rack Laptop Trays — interactive 3D</title>
-<meta name="description" content="1U sliding laptop trays for 10-inch mini racks with ducted rear exhaust cooling. Spin the full assembly in 3D.">
+<title>Mini-Rack Laptop Trays</title>
+<meta name="description" content="Two laptops, one desk. They slide into a 10 inch mini rack like drawers, with ducted fans out the back. Free files, MIT licensed.">
 <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
 <style>
   :root {
@@ -12,7 +12,8 @@
     --panel: #ffffff;
     --text: #1a1d21;
     --muted: #5b6470;
-    --accent: #2563eb;
+    --accent: #f75403;
+    --link: #2563eb;
     --border: #e2e6eb;
   }
   @media (prefers-color-scheme: dark) {
@@ -21,7 +22,8 @@
       --panel: #181b21;
       --text: #e8eaed;
       --muted: #9aa3af;
-      --accent: #60a5fa;
+      --accent: #f97316;
+      --link: #60a5fa;
       --border: #2a2f38;
     }
   }
@@ -29,59 +31,65 @@
   body {
     background: var(--bg);
     color: var(--text);
-    font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+    font: 17px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   }
-  header {
-    padding: 2rem 1.5rem 1rem;
-    max-width: 960px;
-    margin: 0 auto;
-    width: 100%;
-  }
-  h1 { font-size: 1.6rem; letter-spacing: -0.02em; }
-  header p { color: var(--muted); margin-top: 0.35rem; }
-  header a { color: var(--accent); text-decoration: none; }
-  header a:hover { text-decoration: underline; }
-  .viewer-wrap {
-    flex: 1;
-    max-width: 960px;
-    margin: 1rem auto 0;
-    width: 100%;
-    padding: 0 1.5rem;
-  }
+  main { max-width: 880px; margin: 0 auto; padding: 0 1.5rem 3rem; }
+  header { padding: 3rem 0 1rem; }
+  h1 { font-size: 2rem; letter-spacing: -0.02em; line-height: 1.2; }
+  .tagline { color: var(--muted); margin-top: 0.5rem; font-size: 1.1rem; }
+  h2 { font-size: 1.3rem; margin: 2.5rem 0 0.75rem; letter-spacing: -0.01em; }
+  p { margin: 0.9rem 0; }
+  a { color: var(--link); text-decoration: none; }
+  a:hover { text-decoration: underline; }
   model-viewer {
     width: 100%;
-    height: min(70vh, 640px);
+    height: min(62vh, 560px);
     background: var(--panel);
     border: 1px solid var(--border);
     border-radius: 14px;
+    margin-top: 1.5rem;
   }
-  .hint { color: var(--muted); font-size: 0.85rem; text-align: center; padding: 0.6rem 0 0; }
-  footer {
-    max-width: 960px;
-    margin: 0 auto;
+  .hint { color: var(--muted); font-size: 0.85rem; text-align: center; padding: 0.5rem 0 0; }
+  .shots { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.25rem 0; }
+  .shots img {
     width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--panel);
+  }
+  @media (max-width: 640px) { .shots { grid-template-columns: 1fr; } }
+  .cta {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+    padding: 0.7rem 1.3rem;
+    border-radius: 10px;
+    margin-top: 0.5rem;
+  }
+  .cta:hover { text-decoration: none; filter: brightness(1.07); }
+  ul { margin: 0.9rem 0 0.9rem 1.4rem; }
+  li { margin: 0.35rem 0; }
+  footer {
+    max-width: 880px;
+    margin: 0 auto;
     padding: 1.5rem;
     color: var(--muted);
     font-size: 0.9rem;
+    border-top: 1px solid var(--border);
   }
-  footer a { color: var(--accent); text-decoration: none; }
-  footer a:hover { text-decoration: underline; }
 </style>
 </head>
 <body>
-<header>
-  <h1>Mini-Rack Laptop Trays</h1>
-  <p>1U sliding trays for a 10-inch mini rack — MacBook Pro 14 and Surface Laptop 13.8 on smooth rods,
-     with ducted rear exhaust cooling. Drag to orbit, scroll to zoom.
-     Full build details on <a href="https://github.com/mhuot/mini-rack-laptop-trays">GitHub</a>.</p>
-</header>
-<div class="viewer-wrap">
+<main>
+  <header>
+    <h1>Two laptops, one desk. So they slide into the rack.</h1>
+    <p class="tagline">3D printed trays that rack-mount a MacBook Pro and a Surface Laptop in a 10 inch mini rack, with ducted fans out the back. Free files, MIT licensed.</p>
+  </header>
+
   <model-viewer
     src="models/rack-mockup.glb"
-    alt="3D model of a 4U 10-inch mini rack holding two laptops on sliding rod trays with rear fan bars"
+    alt="3D model of a 4U 10 inch mini rack holding two laptops on sliding rod trays with rear fan bars"
     camera-controls
     auto-rotate
     auto-rotate-delay="1500"
@@ -91,11 +99,38 @@
     camera-orbit="35deg 72deg 105%"
     interaction-prompt="none">
   </model-viewer>
-  <p class="hint">Front is toward the protruding laptops; the brown blocks are the Noctua exhaust fans.</p>
-</div>
+  <p class="hint">Drag to spin, scroll to zoom. The orange parts are the printed ones. Print in whatever color you like.</p>
+
+  <h2>Why this exists</h2>
+  <p>I use my laptops clamshell. Lid closed, hooked to an ultrawide with a real keyboard and mouse. The problem is two of them on one desk. My desk is six feet by two and a half, and that still is not enough room, because I want space for other projects too.</p>
+  <p>Then I came across the <a href="https://mini-rack.jeffgeerling.com/">10 inch mini rack standard</a>. Desk sized racks, mostly for home lab gear. I thought, what if the laptops just slid in.</p>
+
+  <h2>How it works</h2>
+  <p>A front bracket and a rear bracket, ears is what I call them, plus 8mm smooth rod I had left over from an old 3D printer. The rods bridge front to back and the laptop slides in like a drawer and rests on them. One rack unit per laptop. A MacBook Pro 14 and a Surface Laptop 13.8 both fit the same parts.</p>
+  <div class="shots">
+    <img src="images/rack-side.png" alt="Side view showing the rod runs and the laptop overhang" loading="lazy">
+    <img src="images/rack-rear-fans.png" alt="Rear view showing the fan bars and ducts" loading="lazy">
+  </div>
+  <p>The laptops ran warm in the confined space and their fans kept spinning up. Not healthy. The fix is a plate that mounts to the back of the rear ears and holds four 40mm Noctua fans, ducted so they pull air across the top and bottom of the laptop and push it out the back. Still inside the single rack unit.</p>
+  <p>Honesty first. I have not thermal tested it yet. The plate exists, the fans are specified, and I do not know yet if it solves the heat. That will be its own evening with a thermometer and probably its own disappointment.</p>
+
+  <h2>Get the files</h2>
+  <p>Everything is in the repo, MIT licensed.</p>
+  <ul>
+    <li>STLs for every part, verified watertight</li>
+    <li>One-plate 3MF files for PrusaSlicer, a full tray set arranged and mirrored</li>
+    <li>STEP and Fusion 360 files if you want to change things</li>
+    <li>A bill of materials, roughly 350g of PETG plus fans, rods, and a handful of M3 hardware</li>
+    <li>Three rear ear options. Heat-set inserts, plain hex nuts, or screws straight into the plastic</li>
+  </ul>
+  <p><a class="cta" href="https://github.com/mhuot/mini-rack-laptop-trays">Get the files on GitHub</a></p>
+
+  <h2>How it got built</h2>
+  <p>I modeled the first pass myself in Fusion 360. The trays worked, then the heat problem sat untouched for months. Not a skill problem, I was stuck, which is a different thing.</p>
+  <p>The cooling came out of handing Claude my Fusion files and photos of the rack through the <a href="https://www.autodesk.com/campaigns/fusion-360/claude-fusion">Fusion MCP</a>. It designed the fan plate and the duct, I caught its mistakes and it caught mine. The repo lists two contributors, me and Claude. The idea was still mine. So was the drawing, the corrections, and the mistake I had to catch myself.</p>
+</main>
 <footer>
-  Printed parts, STLs, and the Fusion 360 scripts that generate this model are in the
-  <a href="https://github.com/mhuot/mini-rack-laptop-trays">repository</a>. MIT licensed.
+  <a href="https://github.com/mhuot/mini-rack-laptop-trays">github.com/mhuot/mini-rack-laptop-trays</a>, MIT licensed. Built by Mike Huot, with Claude doing the clicking.
 </footer>
 </body>
 </html>
