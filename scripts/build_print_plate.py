@@ -58,8 +58,11 @@ def place(mesh, x_center, y_center):
     return mesh
 
 
+BEDS = {"coreone": (250.0, 220.0), "mini": (180.0, 180.0)}
+
+
 def build_parts(variant):
-    """Two plates. The duct set is what you reprint when the fan layout
+    """Two sets. The duct set is what you reprint when the fan layout
     changes; the brackets are print-once and independent of it."""
     front = trimesh.load_mesh(EXPORTS / "front_ear.stl")
     rear = trimesh.load_mesh(EXPORTS / REAR_EAR_FILES[variant])
@@ -67,21 +70,48 @@ def build_parts(variant):
     plug = trimesh.load_mesh(EXPORTS / "fan_plug.stl")
     panel = trimesh.load_mesh(EXPORTS / "duct_panel.stl")
 
-    duct = [
-        ("duct_panel_top", place(panel.copy(), 112.0, 46.0)),
-        ("duct_panel_bottom", place(panel.copy(), 112.0, 124.0)),
-        ("rear_fan_plate", place(plate, 125.0, 188.0)),
-    ]
-    brackets = [
-        ("rear_ear_R", place(rear.copy(), 35.0, 37.0)),
-        ("rear_ear_L", place(mirrored(rear), 75.0, 37.0)),
-        ("front_ear_R", place(front.copy(), 115.0, 37.0)),
-        ("front_ear_L", place(mirrored(front), 155.0, 37.0)),
-        ("fan_plug_1", place(plug.copy(), 40.0, 95.0)),
-        ("fan_plug_2", place(plug.copy(), 95.0, 95.0)),
-    ]
-    return {"duct": duct, f"brackets_{variant}": brackets}
+    return {
+        "duct": [
+            ("duct_panel_top", panel.copy()),
+            ("duct_panel_bottom", panel.copy()),
+            ("rear_fan_plate", plate),
+        ],
+        f"brackets_{variant}": [
+            ("rear_ear_R", rear.copy()),
+            ("rear_ear_L", mirrored(rear)),
+            ("front_ear_R", front.copy()),
+            ("front_ear_L", mirrored(front)),
+            ("fan_plug_1", plug.copy()),
+            ("fan_plug_2", plug.copy()),
+        ],
+    }
 
+
+def arrange(parts, bed, margin=10.0, gap=8.0):
+    """Row-pack left to right, wrapping down. Raises naming the part that
+    did not fit, so the failure is actionable rather than a bare error."""
+    bed_w, bed_h = bed
+    x = y = margin
+    row_depth = 0.0
+    for name, mesh in parts:
+        lo, hi = mesh.bounds
+        width, depth = hi[0] - lo[0], hi[1] - lo[1]
+        if width > bed_w - 2 * margin or depth > bed_h - 2 * margin:
+            raise SystemExit(
+                f"{name} is {width:.0f} x {depth:.0f} mm and will not fit "
+                f"a {bed_w:.0f} x {bed_h:.0f} bed at all")
+        if x + width > bed_w - margin:
+            x = margin
+            y += row_depth + gap
+            row_depth = 0.0
+        if y + depth > bed_h - margin:
+            raise SystemExit(
+                f"ran out of bed placing {name} on "
+                f"{bed_w:.0f} x {bed_h:.0f}")
+        place(mesh, x + width / 2, y + depth / 2)
+        x += width + gap
+        row_depth = max(row_depth, depth)
+    return parts
 
 def write_3mf(parts, out_path):
     objects_xml = []
@@ -116,9 +146,20 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--variant", choices=sorted(REAR_EAR_FILES),
                         default="heatset", help="rear ear variant to plate")
+    parser.add_argument("--bed", choices=sorted(BEDS), default="coreone",
+                        help="target printer bed")
+    parser.add_argument("--set", dest="which", default=None,
+                        help="only emit this set, e.g. brackets_heatset")
     args = parser.parse_args()
+    bed = BEDS[args.bed]
+    suffix = "" if args.bed == "coreone" else "_" + args.bed
 
     for plate_name, parts in build_parts(args.variant).items():
+        if args.which and plate_name != args.which:
+            continue
+        print(f"[{plate_name} on {args.bed} "
+              f"{bed[0]:.0f}x{bed[1]:.0f}]")
+        parts = arrange(parts, bed)
         boxes = []
         for name, mesh in parts:
             assert mesh.volume > 0, f"{name} has inverted winding"
@@ -132,13 +173,12 @@ def main():
                 if (lo1[0] < hi2[0] and lo2[0] < hi1[0]
                         and lo1[1] < hi2[1] and lo2[1] < hi1[1]):
                     raise SystemExit(f"{n1} overlaps {n2} on plate {plate_name}")
-        far = max(hi[:2].max() for _, _, hi in boxes)
-        near = min(lo[:2].min() for _, lo, _ in boxes)
-        if near < 0 or far > 250:
-            raise SystemExit(f"plate {plate_name} runs off the bed "
-                             f"({near:.0f} to {far:.0f})")
+        for name, lo, hi in boxes:
+            if (lo[0] < 0 or lo[1] < 0
+                    or hi[0] > bed[0] or hi[1] > bed[1]):
+                raise SystemExit(f"{name} runs off the {args.bed} bed")
 
-        out_path = EXPORTS / f"print_plate_{plate_name}.3mf"
+        out_path = EXPORTS / f"print_plate_{plate_name}{suffix}.3mf"
         write_3mf(parts, out_path)
         print(f"wrote {out_path} ({out_path.stat().st_size / 1e6:.2f} MB)\n")
 

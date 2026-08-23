@@ -51,6 +51,8 @@ Anything ≤ 222 mm deep and ≤ ~20 mm thick that can hang its side edges on ro
 - `exports/print_plate_brackets_heatset.3mf` (also `_selftap` / `_nuttrap`) — both rear ears, both front ears, two fan plugs. Print once.
 - `exports/print_plate_duct.3mf` — the fan plate and both duct panels. This is the set you reprint when you change the fan layout.
 
+The brackets also fit a Prusa Mini, so they can go on a second printer while the duct set runs: `exports/print_plate_brackets_heatset_mini.3mf`. The duct set cannot — the panels are 194 mm and the fan plate 222 mm, both past a 180 mm bed. Pass `--bed mini` to the generator for other variants.
+
 The duct is modular on purpose. The two panels slide into capture grooves in the rear ears and are trapped by the fan plate, so the duct stays with the rack when the plate comes off. Changing fan count or spacing means reprinting a flat slab in under an hour instead of a six-hour part that is mostly duct wall.
 
 No heat-set inserts on hand? Two alternatives, same fan bar and M3 × 8 screws either way:
