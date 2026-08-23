@@ -63,7 +63,23 @@ The insert version remains the most compact and the nicest to work on.
 | M3 × 8 socket-head screws | 4 | |
 | M3 hex nuts | 4 | nut-trap ear variant only |
 | Rack screws | 8 | per your rack's rail standard |
-| USB power for fans | 1 | 5 V lead + splitter (one can feed both trays) |
+| Spare USB-A cable to sacrifice | 1 per tray | spliced with the included OmniJoin set — see [Wiring](#wiring-the-fans) |
+| Noctua NA-SYC1 chromax Y-cables | optional | [set of three](https://www.amazon.com/Noctua-NA-SYC1-black-NA-SYC1-chromax-Black-y-Cables/dp/B076542HBN) tidies one tray's junction |
+
+## Wiring the fans
+
+The NF-A4x20 5V draws 0.1 A max ([0.5 W, spec](https://www.noctua.at/en/products/nf-a4x20-5v/specifications)), so a full tray of four is 0.4 A worst case — inside the 0.5 A budget of any USB 2.0 port. Both trays on one port is 0.8 A, which wants a USB 3 port (0.9 A) or a 5 V / 1 A phone charger.
+
+The box gives you everything except the USB end: each fan ships with a 30 cm extension and Noctua's OmniJoin splice set (solderless 3M connectors). No USB adapter is included, and **avoid generic "USB fan adapter" cables — most contain a 5 V→12 V boost converter that will kill a 5 V fan.** A 5 V Noctua must never see 12 V.
+
+Per tray:
+
+1. Sacrifice any USB-A cable. Cut off the device end, strip the jacket, keep the **red (+5 V)** and **black (GND)** conductors, and insulate the data pair (green/white) out of the way.
+2. Join all four fans' +5 V leads to USB red and all four GND leads to USB black with the OmniJoin connectors (identify the fan leads from the OmniJoin instruction leaflet — Noctua's cables are all-black, the leaflet is the pinout). Leave each fan's tach lead unconnected and insulated; nothing reads it.
+3. Route the bundle along the top duct panel, down the inside of the rear post, and zip-tie it with a service loop generous enough that the fan bar can be unscrewed without unplugging anything.
+4. Plug in and confirm all four spin before sliding the laptop in.
+
+If you'd rather not splice four joints, three [NA-SYC1 Y-cables](https://www.amazon.com/Noctua-NA-SYC1-black-NA-SYC1-chromax-Black-y-Cables/dp/B076542HBN) merge the four fans to a single 3-pin lead first, leaving one splice to the USB cable. Passive wiring, fine at 5 V.
 
 **Two fans or four?** Rough math says two fans per tray move enough air for typical clamshell loads (~14 °C air rise carrying 40 W); four is margin for sustained heavy load in a warm room. The bar has four openings either way, and empty openings would let the running fans pull backflow — so if you start with two, print two plugs and press them into the unused openings from the rear (duct suction seats them tighter). Outer positions for the fans, inner for the plugs. To upgrade later, drive an M3 screw two turns into a plug's center pilot, pull it, and add the fan — no reprint. The print plates include two plugs.
 
@@ -84,7 +100,7 @@ Any 8 mm smooth rod works (hardened steel or stainless linear rod is ideal — i
 2. Mount front ears to the front rails, rear ears to the rear rails (rear ears point out the back of the rack).
 3. Slide the four rods through the front ears into the rear ears' sockets.
 4. Screw the fans to the rear face of the fan bar (labels facing back — they exhaust rearward), then drive the M3 screws through the bar's counterbored tabs into the ear inserts.
-5. Wire the fans to 5 V USB and slide the laptop in, lid closed, cables at the front.
+5. Wire the fans per [Wiring](#wiring-the-fans), confirm they spin, and slide the laptop in, lid closed, cables at the front.
 
 Total stack behind the rear rail is ~96 mm (ears 69 + pads 3 + bar 4 + fans 20) — leave that much clearance behind the rack.
 
