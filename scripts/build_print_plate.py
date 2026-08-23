@@ -87,7 +87,7 @@ def build_parts(variant):
     }
 
 
-def arrange(parts, bed, margin=10.0, gap=8.0):
+def arrange(parts, bed, margin=8.0, gap=6.0):
     """Row-pack left to right, wrapping down. Raises naming the part that
     did not fit, so the failure is actionable rather than a bare error."""
     bed_w, bed_h = bed
