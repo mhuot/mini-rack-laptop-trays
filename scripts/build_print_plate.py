@@ -62,6 +62,7 @@ def build_parts(variant):
     front = trimesh.load_mesh(EXPORTS / "front_ear.stl")
     rear = trimesh.load_mesh(EXPORTS / REAR_EAR_FILES[variant])
     bar = trimesh.load_mesh(EXPORTS / "rear_fan_bar.stl")
+    plug = trimesh.load_mesh(EXPORTS / "fan_plug.stl")
 
     # Bar exports with its duct panels hanging below the plate; flip so the
     # plate lies on the bed with the panels rising (no supports needed).
@@ -74,6 +75,8 @@ def build_parts(variant):
         ("rear_ear_L", place(mirrored(rear), 105.0, 82.0)),
         ("front_ear_R", place(front.copy(), 155.0, 82.0)),
         ("front_ear_L", place(mirrored(front), 205.0, 82.0)),
+        ("fan_plug_1", place(plug.copy(), 45.0, 28.0)),
+        ("fan_plug_2", place(plug.copy(), 95.0, 28.0)),
     ]
 
 

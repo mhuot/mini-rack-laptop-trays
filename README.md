@@ -42,6 +42,7 @@ Anything ≤ 222 mm deep and ≤ ~20 mm thick that can hang its side edges on ro
 | Front Ear (`exports/front_ear.stl`) | 2 | mirror one in the slicer |
 | Rear Ear v2 (`exports/rear_ear_v2.stl`) | 2 | mirror one; bosses take M3 heat-set inserts |
 | Rear Fan Bar (`exports/rear_fan_bar.stl`) | 1 | prints flat, duct panels up, no supports |
+| Fan opening plug (`exports/fan_plug.stl`) | 0–2 | only if starting with two fans — see below |
 
 **Ready-made print plates:** `exports/print_plate_one_tray_heatset.3mf` (also `_selftap` / `_nuttrap`) opens in PrusaSlicer with a complete tray set arranged for a 250 × 210 bed — both ears mirrored correctly and the fan bar oriented duct-panels-up. Regenerate with `scripts/build_print_plate.py`.
 
@@ -57,12 +58,14 @@ The insert version remains the most compact and the nicest to work on.
 | Item | Qty | Notes |
 |---|---|---|
 | 8 mm smooth rod, 243 mm | 4 | see [Smooth rods](#smooth-rods) |
-| [Noctua NF-A4x20 5V](https://www.amazon.com/Noctua-NF-A4x20-5V-3-Pin-Premium/dp/B072Q3CMRW) | 4 | ships with OmniJoin + fan screws |
+| [Noctua NF-A4x20 5V](https://www.amazon.com/Noctua-NF-A4x20-5V-3-Pin-Premium/dp/B072Q3CMRW) | 2–4 | ships with OmniJoin + fan screws |
 | [M3 × 3 mm heat-set inserts (short)](https://cnckitchenus.store/products/heat-set-insert-m3-x-3-short-version-100-pieces) | 4 | e.g. CNC Kitchen; Ø4.0 × 3.2 pockets (skip for the self-tap ear variant) |
 | M3 × 8 socket-head screws | 4 | |
 | M3 hex nuts | 4 | nut-trap ear variant only |
 | Rack screws | 8 | per your rack's rail standard |
 | USB power for fans | 1 | 5 V lead + splitter (one can feed both trays) |
+
+**Two fans or four?** Rough math says two fans per tray move enough air for typical clamshell loads (~14 °C air rise carrying 40 W); four is margin for sustained heavy load in a warm room. The bar has four openings either way, and empty openings would let the running fans pull backflow — so if you start with two, print two plugs and press them into the unused openings from the rear (duct suction seats them tighter). Outer positions for the fans, inner for the plugs. To upgrade later, drive an M3 screw two turns into a plug's center pilot, pull it, and add the fan — no reprint. The print plates include two plugs.
 
 ## Smooth rods
 
