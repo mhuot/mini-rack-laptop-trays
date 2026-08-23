@@ -42,10 +42,14 @@ SCREW_CLEAR_DIA = 3.4
 HEAD_CBORE_DIA = 6.5
 HEAD_CBORE_DEPTH = 2.0
 
-# Duct shell panels (close the top/bottom leak paths of the rear overhang)
-DUCT_LENGTH = 72.0        # forward projection; reaches the rear rail plane
-DUCT_WALL = 1.8
-DUCT_X_HALF_SPAN = 94.8   # 0.5 mm clear of the ear inner faces at +/-95.3
+# Wire management. Zip-tie slot pairs: a tie threads down one slot, around the
+# fan bundle lying on the rear face, and back up the other. The three inner
+# pairs sit in the 8 mm gaps between fan bodies; the outboard pair is strain
+# relief where the bundle leaves for the USB supply.
+TIE_SLOT_X = (-48.0, 0.0, 48.0, 108.0)
+TIE_SLOT_Y = (14.0, 30.0)
+TIE_SLOT_W = 2.5          # across the plate
+TIE_SLOT_H = 5.0          # along the plate
 
 # Fans: Noctua NF-A4x20 5V
 FAN_CENTERS_X = (-72.0, -24.0, 24.0, 72.0)
@@ -80,7 +84,7 @@ def run(_context: str):
         adsk.core.ValueInput.createByReal(PLATE_THICKNESS * MM),
         adsk.fusion.FeatureOperations.NewBodyFeatureOperation)
     body = plate.bodies.item(0)
-    body.name = "Rear Fan Bar"
+    body.name = "Rear Fan Plate"
 
     # 2. Fan openings + fan screw holes + M3 mounting holes (all through-cuts)
     cut_sketch = root.sketches.add(root.xYConstructionPlane)
@@ -100,19 +104,18 @@ def run(_context: str):
         False, adsk.core.ValueInput.createByReal(PLATE_THICKNESS * MM))
     extrudes.add(through_cut)
 
-    # 3. Duct shell: top/bottom panels extruded forward (join) from the bar face
-    duct_sketch = root.sketches.add(root.xYConstructionPlane)
-    duct_sketch.sketchCurves.sketchLines.addTwoPointRectangle(
-        point(-DUCT_X_HALF_SPAN, BAR_Y_MAX - DUCT_WALL),
-        point(DUCT_X_HALF_SPAN, BAR_Y_MAX))
-    duct_sketch.sketchCurves.sketchLines.addTwoPointRectangle(
-        point(-DUCT_X_HALF_SPAN, BAR_Y_MIN),
-        point(DUCT_X_HALF_SPAN, BAR_Y_MIN + DUCT_WALL))
-    duct_join = extrudes.createInput(
-        all_profiles(duct_sketch), adsk.fusion.FeatureOperations.JoinFeatureOperation)
-    duct_join.setDistanceExtent(
-        False, adsk.core.ValueInput.createByReal(-DUCT_LENGTH * MM))
-    extrudes.add(duct_join)
+    # 3. Zip-tie slots for the fan wiring
+    tie_sketch = root.sketches.add(root.xYConstructionPlane)
+    for slot_x in TIE_SLOT_X:
+        for slot_y in TIE_SLOT_Y:
+            tie_sketch.sketchCurves.sketchLines.addTwoPointRectangle(
+                point(slot_x - TIE_SLOT_W / 2, slot_y - TIE_SLOT_H / 2),
+                point(slot_x + TIE_SLOT_W / 2, slot_y + TIE_SLOT_H / 2))
+    tie_cut = extrudes.createInput(
+        all_profiles(tie_sketch), adsk.fusion.FeatureOperations.CutFeatureOperation)
+    tie_cut.setDistanceExtent(
+        False, adsk.core.ValueInput.createByReal(PLATE_THICKNESS * MM))
+    extrudes.add(tie_cut)
 
     # 4. Counterbores for the M3 screw heads, cut from the rear face
     planes = root.constructionPlanes

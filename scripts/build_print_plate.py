@@ -59,25 +59,28 @@ def place(mesh, x_center, y_center):
 
 
 def build_parts(variant):
+    """Two plates. The duct set is what you reprint when the fan layout
+    changes; the brackets are print-once and independent of it."""
     front = trimesh.load_mesh(EXPORTS / "front_ear.stl")
     rear = trimesh.load_mesh(EXPORTS / REAR_EAR_FILES[variant])
-    bar = trimesh.load_mesh(EXPORTS / "rear_fan_bar.stl")
+    plate = trimesh.load_mesh(EXPORTS / "rear_fan_bar.stl")
     plug = trimesh.load_mesh(EXPORTS / "fan_plug.stl")
+    panel = trimesh.load_mesh(EXPORTS / "duct_panel.stl")
 
-    # Bar exports with its duct panels hanging below the plate; flip so the
-    # plate lies on the bed with the panels rising (no supports needed).
-    bar.apply_transform(trimesh.transformations.rotation_matrix(
-        np.pi, [1, 0, 0]))
-
-    return [
-        ("rear_fan_bar", place(bar, 125.0, 150.0)),
-        ("rear_ear_R", place(rear.copy(), 55.0, 82.0)),
-        ("rear_ear_L", place(mirrored(rear), 105.0, 82.0)),
-        ("front_ear_R", place(front.copy(), 155.0, 82.0)),
-        ("front_ear_L", place(mirrored(front), 205.0, 82.0)),
-        ("fan_plug_1", place(plug.copy(), 45.0, 28.0)),
-        ("fan_plug_2", place(plug.copy(), 95.0, 28.0)),
+    duct = [
+        ("duct_panel_top", place(panel.copy(), 112.0, 46.0)),
+        ("duct_panel_bottom", place(panel.copy(), 112.0, 124.0)),
+        ("rear_fan_plate", place(plate, 125.0, 188.0)),
     ]
+    brackets = [
+        ("rear_ear_R", place(rear.copy(), 35.0, 37.0)),
+        ("rear_ear_L", place(mirrored(rear), 75.0, 37.0)),
+        ("front_ear_R", place(front.copy(), 115.0, 37.0)),
+        ("front_ear_L", place(mirrored(front), 155.0, 37.0)),
+        ("fan_plug_1", place(plug.copy(), 40.0, 95.0)),
+        ("fan_plug_2", place(plug.copy(), 95.0, 95.0)),
+    ]
+    return {"duct": duct, f"brackets_{variant}": brackets}
 
 
 def write_3mf(parts, out_path):
@@ -115,17 +118,29 @@ def main():
                         default="heatset", help="rear ear variant to plate")
     args = parser.parse_args()
 
-    parts = build_parts(args.variant)
-    for name, mesh in parts:
-        assert mesh.volume > 0, f"{name} has inverted winding"
-        lo, hi = mesh.bounds
-        print(f"{name:14s} footprint {hi[0]-lo[0]:6.1f} x {hi[1]-lo[1]:6.1f} mm, "
-              f"height {hi[2]-lo[2]:5.1f} mm at ({lo[0]:.0f}..{hi[0]:.0f}, "
-              f"{lo[1]:.0f}..{hi[1]:.0f})")
+    for plate_name, parts in build_parts(args.variant).items():
+        boxes = []
+        for name, mesh in parts:
+            assert mesh.volume > 0, f"{name} has inverted winding"
+            lo, hi = mesh.bounds
+            boxes.append((name, lo, hi))
+            print(f"  {name:20s} {hi[0]-lo[0]:6.1f} x {hi[1]-lo[1]:5.1f} x "
+                  f"{hi[2]-lo[2]:5.1f} at x {lo[0]:.0f}..{hi[0]:.0f} "
+                  f"y {lo[1]:.0f}..{hi[1]:.0f}")
+        for i, (n1, lo1, hi1) in enumerate(boxes):
+            for n2, lo2, hi2 in boxes[i + 1:]:
+                if (lo1[0] < hi2[0] and lo2[0] < hi1[0]
+                        and lo1[1] < hi2[1] and lo2[1] < hi1[1]):
+                    raise SystemExit(f"{n1} overlaps {n2} on plate {plate_name}")
+        far = max(hi[:2].max() for _, _, hi in boxes)
+        near = min(lo[:2].min() for _, lo, _ in boxes)
+        if near < 0 or far > 250:
+            raise SystemExit(f"plate {plate_name} runs off the bed "
+                             f"({near:.0f} to {far:.0f})")
 
-    out_path = EXPORTS / f"print_plate_one_tray_{args.variant}.3mf"
-    write_3mf(parts, out_path)
-    print(f"wrote {out_path} ({out_path.stat().st_size / 1e6:.2f} MB)")
+        out_path = EXPORTS / f"print_plate_{plate_name}.3mf"
+        write_3mf(parts, out_path)
+        print(f"wrote {out_path} ({out_path.stat().st_size / 1e6:.2f} MB)\n")
 
 
 if __name__ == "__main__":

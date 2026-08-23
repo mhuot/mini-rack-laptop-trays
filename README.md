@@ -18,7 +18,8 @@ Want to spin it yourself? **[Open the interactive 3D viewer](https://mhuot.githu
 
 - **Front and rear ears** print in mirrored pairs and bolt to the rack rails with standard rack screws. Each ear carries two 8 mm smooth-rod positions, spaced to leave a 24 mm gap — the laptop slides between the rod pairs and rests on the lower rods.
 - **The rear ears extend 67 mm out the back of the rack**, so the laptop's rear edge sits behind the rear rail and stops against the ears' back plates. A MacBook Pro 14 noses ~45 mm out the front; the Surface Laptop 13.8 ~33 mm.
-- **The fan bar** screws into heat-set inserts in the rear ears' back plates. Four Noctua NF-A4x20 5V fans (40 mm fits upright inside the 44.45 mm rack unit) exhaust rearward. Integrated 1.8 mm duct panels close the top and bottom of the rear overhang, and the rear ears carry a 2 mm outboard side wall closing their side windows — so the fans can only draw air from inside the rack, sweeping the lid and the underside of the chassis on the way through.
+- **The fan plate** screws into heat-set inserts in the rear ears' back plates. Four Noctua NF-A4x20 5V fans (40 mm fits upright inside the 44.45 mm rack unit) exhaust rearward. Two 2 mm duct panels close the top and bottom of the rear overhang, and the rear ears carry a 2 mm outboard side wall closing their side windows — so the fans can only draw air from inside the rack, sweeping the lid and the underside of the chassis on the way through.
+- **Fan wiring** runs along the rear face of the plate, held clear of the blades by zip ties through the slot pairs between the fan bodies. The outboard pair is strain relief where the bundle leaves for the USB supply. Splices belong outside the rack, near the power source, not pocketed into a 4 mm plate.
 - Laptops run clamshell; all cables exit at the front (orient the Surface with its USB-C edge forward).
 - The RackMate-style cabinet has closed acrylic sides and top, so the front opening is the only intake: the fans drive true front-to-back flow through the slot, and the hinge-side exhaust is entrained in the same rearward stream. No side baffles needed.
 
@@ -41,10 +42,16 @@ Anything ≤ 222 mm deep and ≤ ~20 mm thick that can hang its side edges on ro
 |---|---|---|
 | Front Ear (`exports/front_ear.stl`) | 2 | mirror one in the slicer |
 | Rear Ear v2 (`exports/rear_ear_v2.stl`) | 2 | mirror one; bosses take M3 heat-set inserts |
-| Rear Fan Bar (`exports/rear_fan_bar.stl`) | 1 | prints flat, duct panels up, no supports |
+| Rear Fan Plate (`exports/rear_fan_bar.stl`) | 1 | flat 4 mm slab, ~45 min |
+| Duct panel (`exports/duct_panel.stl`) | 2 | flat sheets, slide into the ear grooves |
 | Fan opening plug (`exports/fan_plug.stl`) | 0–2 | only if starting with two fans — see below |
 
-**Ready-made print plates:** `exports/print_plate_one_tray_heatset.3mf` (also `_selftap` / `_nuttrap`) opens in PrusaSlicer with a complete tray set arranged for a 250 × 210 bed — both ears mirrored correctly and the fan bar oriented duct-panels-up. Regenerate with `scripts/build_print_plate.py`.
+**Ready-made print plates**, arranged for a 250 × 220 bed and mirrored where needed. Regenerate with `scripts/build_print_plate.py`.
+
+- `exports/print_plate_brackets_heatset.3mf` (also `_selftap` / `_nuttrap`) — both rear ears, both front ears, two fan plugs. Print once.
+- `exports/print_plate_duct.3mf` — the fan plate and both duct panels. This is the set you reprint when you change the fan layout.
+
+The duct is modular on purpose. The two panels slide into capture grooves in the rear ears and are trapped by the fan plate, so the duct stays with the rack when the plate comes off. Changing fan count or spacing means reprinting a flat slab in under an hour instead of a six-hour part that is mostly duct wall.
 
 No heat-set inserts on hand? Two alternatives, same fan bar and M3 × 8 screws either way:
 
@@ -111,7 +118,9 @@ Models are built in Fusion 360, driven by the Python scripts in [`scripts/`](scr
 - [`build_rear_ear_v2.py`](scripts/build_rear_ear_v2.py) — copies the proven rear ear bodies and adds the insert bosses
 - [`export_front_ear.py`](scripts/export_front_ear.py) — exports the front ear with a slicer-friendly tangency relief
 - [`build_print_plate.py`](scripts/build_print_plate.py) — assembles the one-tray 3MF print plates from the STLs
-- [`build_rear_fan_bar.py`](scripts/build_rear_fan_bar.py) — the ducted fan bar
+- [`build_rear_fan_bar.py`](scripts/build_rear_fan_bar.py) — the fan plate, with the wiring tie slots
+- [`build_duct_panel.py`](scripts/build_duct_panel.py) — the duct panels
+- [`build_fan_plug.py`](scripts/build_fan_plug.py) — the blanking plug for unused fan openings
 - [`build_rack_mockup.py`](scripts/build_rack_mockup.py) — the full-rack mockup used for the renders on this page
 
 Fusion API note: all API lengths are centimeters; the scripts define `MM = 0.1` and work in millimeters throughout.

@@ -57,6 +57,9 @@ SIDE_WALL_Y0, SIDE_WALL_Y1 = 0.0, 44.45
 SIDE_WALL_Z0 = 0.0  # wall runs to the pad face (RIB_Z_END): no rear notch
 LAPTOP_RELIEF_X1 = 0.65
 LAPTOP_RELIEF_Y0, LAPTOP_RELIEF_Y1 = 9.7, 34.7
+# The laptop's rear edge stops at z = 67, so the relief only needs to run
+# that far; the wall stays full thickness across the back plate above it.
+LAPTOP_RELIEF_Z0, LAPTOP_RELIEF_Z1 = -0.1, 67.1
 # The stock ear's rod bores are exactly tangent to the laptop slot faces
 # (rod center 6.22/38.23 + r4 = faces at 10.22/34.23), which produces
 # non-manifold edges that slicers report as open. Relieving the slot faces
@@ -64,6 +67,14 @@ LAPTOP_RELIEF_Y0, LAPTOP_RELIEF_Y1 = 9.7, 34.7
 # rides on the rods either way.
 TANGENCY_X0, TANGENCY_X1 = -12.5, -2.5
 TANGENCY_Y0, TANGENCY_Y1 = 10.10, 34.35
+# Capture grooves for the separate duct panels (modular build). The panels
+# slide in from the rear along these and the fan plate caps them, so the duct
+# stays with the rack when the fan plate comes off. 2.2 tall for a 2.0 panel.
+DUCT_GROOVE = True
+GROOVE_X0, GROOVE_X1 = -15.1, -13.0        # cut outboard from the inner face
+GROOVE_BOTTOM_Y0, GROOVE_BOTTOM_Y1 = 0.4, 2.6
+GROOVE_TOP_Y0, GROOVE_TOP_Y1 = 41.85, 44.05
+GROOVE_Z0, GROOVE_Z1 = -0.1, 72.1
 
 
 def run(_context: str):
@@ -135,9 +146,16 @@ def run(_context: str):
         combined, side_wall, adsk.fusion.BooleanTypes.UnionBooleanType)
     laptop_relief = slab(-0.05, LAPTOP_RELIEF_X1,
                          LAPTOP_RELIEF_Y0, LAPTOP_RELIEF_Y1,
-                         SIDE_WALL_Z0 - 0.1, SIDE_WALL_Z1 + 0.1)
+                         LAPTOP_RELIEF_Z0, LAPTOP_RELIEF_Z1)
     temp_mgr.booleanOperation(
         combined, laptop_relief, adsk.fusion.BooleanTypes.DifferenceBooleanType)
+
+    if DUCT_GROOVE:
+        for y0, y1 in ((GROOVE_BOTTOM_Y0, GROOVE_BOTTOM_Y1),
+                       (GROOVE_TOP_Y0, GROOVE_TOP_Y1)):
+            groove = slab(GROOVE_X0, GROOVE_X1, y0, y1, GROOVE_Z0, GROOVE_Z1)
+            temp_mgr.booleanOperation(
+                combined, groove, adsk.fusion.BooleanTypes.DifferenceBooleanType)
 
     for boss_y in BOSS_ROWS:
         if NUT_TRAP:
