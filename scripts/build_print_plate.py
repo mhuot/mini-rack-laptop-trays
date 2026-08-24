@@ -49,6 +49,16 @@ def mirrored(mesh):
     return copy
 
 
+def flipped(mesh):
+    """Turn a part over, print-side down, keeping the winding valid."""
+    copy = mesh.copy()
+    copy.apply_transform(trimesh.transformations.rotation_matrix(
+        np.pi, [1.0, 0.0, 0.0]))
+    if copy.volume < 0:
+        copy.invert()
+    return copy
+
+
 def place(mesh, x_center, y_center):
     """Drop the mesh so it sits on z=0 centered at (x_center, y_center)."""
     lo, hi = mesh.bounds
@@ -74,7 +84,11 @@ def build_parts(variant):
         "duct": [
             ("duct_panel_top", panel.copy()),
             ("duct_panel_bottom", panel.copy()),
-            ("rear_fan_plate", plate),
+            # Grooves are cut into the plate's front face. Printed that way up
+            # they cost 9% of the first layer and turn into a 2.2 mm bridge, so
+            # print it over: full first layer, and the groove that has to seal
+            # comes out as an open pocket instead.
+            ("rear_fan_plate", flipped(plate)),
         ],
         f"brackets_{variant}": [
             ("rear_ear_R", rear.copy()),

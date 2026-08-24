@@ -58,6 +58,33 @@ FAN_OPENING_DIA = 39.0
 FAN_SCREW_PITCH = 32.0
 FAN_SCREW_DIA = 3.6
 
+# Duct panel capture. The panels are held only in the ear rails, 10 mm at each
+# end, which leaves 170 mm of free 2 mm sheet whose rear edge has nothing
+# holding it against this plate. Butted like that it cannot seal. A shallow
+# groove in the front face turns the butt into a lap: the panel grows to 73 mm
+# and its last millimetre lands in here, which seals the joint and pulls the
+# edge flat at the same time.
+#
+# Along the panel line each fan bore is only ~8.6 mm wide in x, so the groove
+# is solid for about 69% of the panel edge; the rest opens into a fan bore,
+# which is where the air is going anyway.
+DUCT_GROOVE = True
+GROOVE_DEPTH = 1.0
+GROOVE_X_HALF = 97.6      # covers the 194.44 panel, stops short of the bosses
+GROOVE_CLEARANCE = 0.1    # per face, so the panel enters without forcing
+PANEL_THICKNESS = 2.0
+EAR_WALL = 2.0            # rail wall in build_rear_ear_v2.py
+EAR_SLOT_HEIGHT = 2.4     # rail slot in build_rear_ear_v2.py
+RACK_UNIT = 44.45
+
+_panel_low = EAR_WALL + (EAR_SLOT_HEIGHT - PANEL_THICKNESS) / 2
+GROOVE_BANDS = (
+    (_panel_low - GROOVE_CLEARANCE,
+     _panel_low + PANEL_THICKNESS + GROOVE_CLEARANCE),
+    (RACK_UNIT - _panel_low - PANEL_THICKNESS - GROOVE_CLEARANCE,
+     RACK_UNIT - _panel_low + GROOVE_CLEARANCE),
+)
+
 
 def run(_context: str):
     app = adsk.core.Application.get()
@@ -135,6 +162,23 @@ def run(_context: str):
         False, adsk.core.ValueInput.createByReal(-HEAD_CBORE_DEPTH * MM))
     extrudes.add(cbore_cut)
 
+    # 5. Duct panel capture grooves in the front face (the face that lands on
+    #    the ear pads). Cut last so it takes whatever the fan bores left.
+    if DUCT_GROOVE:
+        groove_sketch = root.sketches.add(root.xYConstructionPlane)
+        for band_y0, band_y1 in GROOVE_BANDS:
+            groove_sketch.sketchCurves.sketchLines.addTwoPointRectangle(
+                point(-GROOVE_X_HALF, band_y0), point(GROOVE_X_HALF, band_y1))
+        groove_cut = extrudes.createInput(
+            all_profiles(groove_sketch),
+            adsk.fusion.FeatureOperations.CutFeatureOperation)
+        groove_cut.setDistanceExtent(
+            False, adsk.core.ValueInput.createByReal(GROOVE_DEPTH * MM))
+        extrudes.add(groove_cut)
+
     app.activeViewport.fit()
     print("Created document '%s' with body '%s' (%d faces)" % (
         doc.name, body.name, body.faces.count))
+    for band_y0, band_y1 in GROOVE_BANDS:
+        print("  capture groove y %.2f..%.2f, %.1f deep, x +/-%.1f" % (
+            band_y0, band_y1, GROOVE_DEPTH, GROOVE_X_HALF))
