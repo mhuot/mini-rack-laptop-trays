@@ -111,6 +111,19 @@ def arrange(parts, bed, margin=8.0, gap=6.0):
         place(mesh, x + width / 2, y + depth / 2)
         x += width + gap
         row_depth = max(row_depth, depth)
+
+    # Pull the whole arrangement to the middle of the bed. Packing from a
+    # corner is fine for fitting, but the extreme front-left is the worst-
+    # adhering region of this bed and a set with room to spare has no reason
+    # to sit there. Plates that genuinely fill the bed barely move.
+    lows = [m.bounds[0] for _, m in parts]
+    highs = [m.bounds[1] for _, m in parts]
+    span_x = max(h[0] for h in highs) - min(l[0] for l in lows)
+    span_y = max(h[1] for h in highs) - min(l[1] for l in lows)
+    shift_x = (bed_w - span_x) / 2 - min(l[0] for l in lows)
+    shift_y = (bed_h - span_y) / 2 - min(l[1] for l in lows)
+    for _, mesh in parts:
+        mesh.apply_translation([shift_x, shift_y, 0.0])
     return parts
 
 def write_3mf(parts, out_path):
