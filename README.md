@@ -49,7 +49,9 @@ Anything ≤ 222 mm deep and ≤ ~20 mm thick that can hang its side edges on ro
 **Ready-made print plates**, arranged for a 250 × 220 bed and mirrored where needed. Regenerate with `scripts/build_print_plate.py`.
 
 - `exports/print_plate_brackets_heatset.3mf` (also `_selftap` / `_nuttrap`) — both rear ears, both front ears, two fan plugs. Print once.
-- `exports/print_plate_duct.3mf` — the fan plate and both duct panels. This is the set you reprint when you change the fan layout.
+- `exports/print_plate_duct_panels.3mf` and `exports/print_plate_fan_plate.3mf` — the duct set, split across two plates. This is what you reprint when you change the fan layout.
+
+The duct is two plates rather than one because together the three parts fill the bed corner to corner, which put a panel corner 14 mm from the left edge and 8 mm from the front — and that corner is where first layers fail. Split, each plate centres with at least 20 mm clear on every side, brim included.
 
 The brackets also fit a Prusa Mini, so they can go on a second printer while the duct set runs: `exports/print_plate_brackets_heatset_mini.3mf`. The duct set cannot — the panels are 194 mm and the fan plate 222 mm, both past a 180 mm bed. Pass `--bed mini` to the generator for other variants.
 

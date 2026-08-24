@@ -81,9 +81,16 @@ def build_parts(variant):
     panel = trimesh.load_mesh(EXPORTS / "duct_panel.stl")
 
     return {
-        "duct": [
+        # The duct used to be one plate. Together the three parts fill the bed
+        # corner to corner, which put a panel corner at (14, 8) -- into the
+        # front-left of the bed, where the first layer has now failed twice.
+        # Split, each plate centres with room on every side and nothing sits
+        # in that corner.
+        "duct_panels": [
             ("duct_panel_top", panel.copy()),
             ("duct_panel_bottom", panel.copy()),
+        ],
+        "fan_plate": [
             # Grooves are cut into the plate's front face. Printed that way up
             # they cost 9% of the first layer and turn into a 2.2 mm bridge, so
             # print it over: full first layer, and the groove that has to seal
