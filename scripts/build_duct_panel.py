@@ -23,7 +23,11 @@ PANEL_WIDTH = 194.44      # 2 x 97.32 groove floors, less 0.2 slide clearance
 # 72 of ear depth, rail plane to fan plate face, plus 2.0 that lands in the
 # capture groove in the fan plate so the rear edge is lapped rather than butted.
 PANEL_LENGTH = 74.0
-PANEL_THICK = 2.0         # slot is 2.4 tall, leaving 0.2 of slip per face
+# The slot is 2.4 tall. A 2.0 panel leaves 0.4 mm of free play, and a 37 g
+# sheet with that much room next to four fans will buzz on impact whatever its
+# natural frequency happens to be. 2.2 is 11 layers at 0.2 and halves the gap
+# to a textbook 0.2 mm sliding fit, while stiffening the panel by a third.
+PANEL_THICK = 2.2
 CHAMFER = 0.6             # lead-in so the panel starts into the slot easily
 
 
