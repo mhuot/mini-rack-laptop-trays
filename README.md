@@ -43,7 +43,7 @@ Anything ≤ 222 mm deep and ≤ ~20 mm thick that can hang its side edges on ro
 | Front Ear (`exports/front_ear.stl`) | 2 | mirror one in the slicer |
 | Rear Ear v2 (`exports/rear_ear_v2.stl`) | 2 | mirror one; bosses take M3 heat-set inserts |
 | Rear Fan Plate (`exports/rear_fan_bar.stl`) | 1 | flat 4 mm slab, ~45 min |
-| Duct panel (`exports/duct_panel.stl`) | 2 | flat sheets, slide into the ear grooves |
+| Duct panel (`exports/duct_panel.stl`) | 2 | flat sheets, slide into the ear capture rails |
 | Fan opening plug (`exports/fan_plug.stl`) | 0–2 | only if starting with two fans — see below |
 
 **Ready-made print plates**, arranged for a 250 × 220 bed and mirrored where needed. Regenerate with `scripts/build_print_plate.py`.
@@ -53,7 +53,9 @@ Anything ≤ 222 mm deep and ≤ ~20 mm thick that can hang its side edges on ro
 
 The brackets also fit a Prusa Mini, so they can go on a second printer while the duct set runs: `exports/print_plate_brackets_heatset_mini.3mf`. The duct set cannot — the panels are 194 mm and the fan plate 222 mm, both past a 180 mm bed. Pass `--bed mini` to the generator for other variants.
 
-The duct is modular on purpose. The two panels slide into capture grooves in the rear ears and are trapped by the fan plate, so the duct stays with the rack when the plate comes off. Changing fan count or spacing means reprinting a flat slab in under an hour instead of a six-hour part that is mostly duct wall.
+The duct is modular on purpose. The two panels slide into capture rails on the rear ears and are trapped by the fan plate, so the duct stays with the rack when the plate comes off. Changing fan count or spacing means reprinting a flat slab in under an hour instead of a six-hour part that is mostly duct wall.
+
+Those rails reach 10 mm inboard from each ear, into the dead space above and below the laptop, and carry a 2.4 mm slot between 2 mm walls. That holds a panel over 12 mm of its width rather than the 2 mm a pocket in the ear face managed on its own, and it does it without making the panel any bigger — the rails add material rather than hollowing the ear out, so the rod bores are untouched and the part still prints with no overhangs.
 
 No heat-set inserts on hand? Two alternatives, same fan bar and M3 × 8 screws either way:
 
