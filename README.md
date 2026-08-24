@@ -64,6 +64,8 @@ No heat-set inserts on hand? Two alternatives, same fan bar and M3 × 8 screws e
 
 The insert version remains the most compact and the nicest to work on.
 
+A note on all three, because it is not obvious from looking at them: the ear prints standing on its rail flange, so the back plate starts as a bridge across the open duct and the insert pocket sits directly above it. Whatever floor is left under a pocket is made of the first bridged layers, with nothing on top to pull them flat — get it too thin and the bottom of the pocket comes out rough. The heat-set pocket is 3.2 mm deep on a 3.8 mm floor; the self-tap and nut-trap variants keep 1.5 mm on a thinner plate.
+
 **Hardware:**
 
 | Item | Qty | Notes |
