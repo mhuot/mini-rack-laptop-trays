@@ -69,21 +69,27 @@ FAN_SCREW_DIA = 3.6
 # is solid for about 69% of the panel edge; the rest opens into a fan bore,
 # which is where the air is going anyway.
 DUCT_GROOVE = True
-GROOVE_DEPTH = 1.0
+GROOVE_DEPTH = 2.0        # 2 mm of lap in a 4 mm plate
 GROOVE_X_HALF = 97.6      # covers the 194.44 panel, stops short of the bosses
-GROOVE_CLEARANCE = 0.1    # per face, so the panel enters without forcing
 PANEL_THICKNESS = 2.0
 EAR_WALL = 2.0            # rail wall in build_rear_ear_v2.py
 EAR_SLOT_HEIGHT = 2.4     # rail slot in build_rear_ear_v2.py
 RACK_UNIT = 44.45
 
-_panel_low = EAR_WALL + (EAR_SLOT_HEIGHT - PANEL_THICKNESS) / 2
+# The groove is the rail slot continued, not a tighter version of it. The panel
+# has 0.4 mm of play in the ear rail and gravity rests it on the rail's lower
+# wall, so a groove sized to the panel rather than to the slot would sit 0.1 mm
+# high and the plate would jam on the panel edge instead of seating on the pads.
 GROOVE_BANDS = (
-    (_panel_low - GROOVE_CLEARANCE,
-     _panel_low + PANEL_THICKNESS + GROOVE_CLEARANCE),
-    (RACK_UNIT - _panel_low - PANEL_THICKNESS - GROOVE_CLEARANCE,
-     RACK_UNIT - _panel_low + GROOVE_CLEARANCE),
+    (EAR_WALL, EAR_WALL + EAR_SLOT_HEIGHT),
+    (RACK_UNIT - EAR_WALL - EAR_SLOT_HEIGHT, RACK_UNIT - EAR_WALL),
 )
+# Note: this puts the groove's inner wall 0.025 mm from the fan screw holes
+# (Ø3.6 on the 32 mm Noctua pitch, nearest edge y=4.425). That wall cannot be
+# printed and the two will merge. It is harmless -- the screw fills the hole and
+# the far end dead-ends in the fan's own boss -- but it is deliberate, not an
+# oversight. The panel line and the fan screw line are 0.225 mm apart; nothing
+# short of moving the fans changes that.
 
 
 def run(_context: str):

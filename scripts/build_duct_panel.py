@@ -20,9 +20,9 @@ import adsk.fusion
 MM = 0.1  # Fusion API lengths are in cm
 
 PANEL_WIDTH = 194.44      # 2 x 97.32 groove floors, less 0.2 slide clearance
-# 72 of ear depth, rail plane to fan plate face, plus 1.0 that lands in the
+# 72 of ear depth, rail plane to fan plate face, plus 2.0 that lands in the
 # capture groove in the fan plate so the rear edge is lapped rather than butted.
-PANEL_LENGTH = 73.0
+PANEL_LENGTH = 74.0
 PANEL_THICK = 2.0         # slot is 2.4 tall, leaving 0.2 of slip per face
 CHAMFER = 0.6             # lead-in so the panel starts into the slot easily
 
