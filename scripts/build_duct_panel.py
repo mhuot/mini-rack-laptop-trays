@@ -21,8 +21,8 @@ MM = 0.1  # Fusion API lengths are in cm
 
 PANEL_WIDTH = 194.44      # 2 x 97.32 groove floors, less 0.2 slide clearance
 PANEL_LENGTH = 72.0       # ear depth: rail plane to fan plate face
-PANEL_THICK = 2.0         # groove is 2.2 tall, leaving 0.2 of slip
-CHAMFER = 0.6             # lead-in so the panel starts into the groove easily
+PANEL_THICK = 2.0         # slot is 2.4 tall, leaving 0.2 of slip per face
+CHAMFER = 0.6             # lead-in so the panel starts into the slot easily
 
 
 def run(_context: str):

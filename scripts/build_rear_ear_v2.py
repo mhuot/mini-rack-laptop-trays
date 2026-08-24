@@ -67,13 +67,30 @@ LAPTOP_RELIEF_Z0, LAPTOP_RELIEF_Z1 = -0.1, 67.1
 # rides on the rods either way.
 TANGENCY_X0, TANGENCY_X1 = -12.5, -2.5
 TANGENCY_Y0, TANGENCY_Y1 = 10.10, 34.35
-# Capture grooves for the separate duct panels (modular build). The panels
+# Capture channels for the separate duct panels (modular build). The panels
 # slide in from the rear along these and the fan plate caps them, so the duct
-# stays with the rack when the fan plate comes off. 2.2 tall for a 2.0 panel.
+# stays with the rack when the fan plate comes off.
+#
+# A groove cut into the inner face alone gripped the panel over only 2 mm and
+# left a 0.4 mm lip at the 1U edge. Instead the material is added inboard: a
+# rail projects into the empty space above and below the laptop and carries
+# the slot with it, so the panel is held over 12 mm at the same size. Walls are
+# 2 mm to match the rest of the design and the slot is 2.4 for a 2.0 panel,
+# which leaves 0.2 mm of slip per face.
 DUCT_GROOVE = True
-GROOVE_X0, GROOVE_X1 = -15.1, -13.0        # cut outboard from the inner face
-GROOVE_BOTTOM_Y0, GROOVE_BOTTOM_Y1 = 0.4, 2.6
-GROOVE_TOP_Y0, GROOVE_TOP_Y1 = 41.85, 44.05
+INNER_FACE_X = -15.0
+DUCT_RAIL_LENGTH = 10.0   # reach toward the rack centre from the inner face
+DUCT_SLOT_HEIGHT = 2.4
+DUCT_WALL = 2.0
+GROOVE_DEPTH = 2.0        # pocket into the ear's own inner face
+RAIL_X0 = INNER_FACE_X - DUCT_RAIL_LENGTH
+RAIL_BLOCK_HEIGHT = 2 * DUCT_WALL + DUCT_SLOT_HEIGHT
+RAIL_Z0, RAIL_Z1 = 0.0, 72.0
+GROOVE_X0, GROOVE_X1 = RAIL_X0 - 0.1, INNER_FACE_X + GROOVE_DEPTH
+GROOVE_BOTTOM_Y0 = DUCT_WALL
+GROOVE_BOTTOM_Y1 = DUCT_WALL + DUCT_SLOT_HEIGHT
+GROOVE_TOP_Y0 = RIB_Y_MAX - DUCT_WALL - DUCT_SLOT_HEIGHT
+GROOVE_TOP_Y1 = RIB_Y_MAX - DUCT_WALL
 GROOVE_Z0, GROOVE_Z1 = -0.1, 72.1
 
 
@@ -151,6 +168,13 @@ def run(_context: str):
         combined, laptop_relief, adsk.fusion.BooleanTypes.DifferenceBooleanType)
 
     if DUCT_GROOVE:
+        # Add the rails first, then cut the slot through rail and ear together
+        # so the panel still bottoms out on the original groove floor.
+        for y0, y1 in ((RIB_Y_MIN, RIB_Y_MIN + RAIL_BLOCK_HEIGHT),
+                       (RIB_Y_MAX - RAIL_BLOCK_HEIGHT, RIB_Y_MAX)):
+            rail = slab(RAIL_X0, INNER_FACE_X, y0, y1, RAIL_Z0, RAIL_Z1)
+            temp_mgr.booleanOperation(
+                combined, rail, adsk.fusion.BooleanTypes.UnionBooleanType)
         for y0, y1 in ((GROOVE_BOTTOM_Y0, GROOVE_BOTTOM_Y1),
                        (GROOVE_TOP_Y0, GROOVE_TOP_Y1)):
             groove = slab(GROOVE_X0, GROOVE_X1, y0, y1, GROOVE_Z0, GROOVE_Z1)

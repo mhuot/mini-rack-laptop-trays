@@ -41,7 +41,7 @@ ROD_Z0, ROD_Z1 = -EAR_PLATE, -EAR_PLATE + 243.0
 
 BAR_Z0, BAR_Z1 = 272.0, 276.0
 FAN_CENTERS_X = (-72.0, -24.0, 24.0, 72.0)
-DUCT_X = 94.8
+DUCT_X = 97.22          # half of the 194.44 panel, into the ear groove floors
 
 SLOTS = [
     {"u_bottom": RU, "laptop": "surface", "label": "U2 Surface Laptop 13.8"},
@@ -220,8 +220,11 @@ def run(_context: str):
             opening = cyl_z(fan_x, y0 + 22.225, BAR_Z0 - 1, BAR_Z1 + 1, 39.0)
             temp_mgr.booleanOperation(
                 bar, opening, adsk.fusion.BooleanTypes.DifferenceBooleanType)
-        duct_top = box(-DUCT_X, DUCT_X, y0 + 42.25, y0 + 44.05, 202.0, BAR_Z0)
-        duct_bottom = box(-DUCT_X, DUCT_X, y0 + 0.4, y0 + 2.2, 202.0, BAR_Z0)
+        # The panels ride in the ears' capture rails: 2 mm walls put the
+        # 2.4 mm slots at y 2.0-4.4 and 40.05-42.45, so a 2 mm panel centres
+        # at 2.2-4.2 and 40.25-42.25.
+        duct_top = box(-DUCT_X, DUCT_X, y0 + 40.25, y0 + 42.25, 202.0, BAR_Z0)
+        duct_bottom = box(-DUCT_X, DUCT_X, y0 + 2.2, y0 + 4.2, 202.0, BAR_Z0)
         temp_mgr.booleanOperation(bar, duct_top,
                                   adsk.fusion.BooleanTypes.UnionBooleanType)
         temp_mgr.booleanOperation(bar, duct_bottom,
