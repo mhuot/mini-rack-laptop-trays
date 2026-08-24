@@ -32,7 +32,9 @@ RIB_Y_MAX = 44.45
 RIB_Z_START = 69.0
 # Heat-set variant (default): pocket for CNC Kitchen M3 x 3 short inserts.
 # Self-tap variant (no inserts): set INSERT_HOLE_DIA = 2.5 and
-# INSERT_HOLE_DEPTH = 4.7 — the M3 screw thread-forms into the PETG.
+# INSERT_HOLE_DEPTH = 3.5 — the M3 screw thread-forms into the PETG. 3.5 rather
+# than the plate's full depth so 1.5 mm of floor is left under the hole; see
+# the note on bridging at SCREW_RELIEF_Z0.
 # Nut-trap variant (no inserts, metal threads): set NUT_TRAP = True — the
 # rib grows to 5 mm proud and each boss gets a side-loading slot for a
 # standard M3 hex nut (a DIN 562 square nut fits the same slot). The fan
@@ -46,7 +48,10 @@ SCREW_CLEAR_DIA = 3.4
 NUT_SLOT_WIDTH = 5.7          # grips the 5.5 across-flats of an M3 nut
 NUT_SLOT_Z0, NUT_SLOT_Z1 = 69.4, 72.1
 NUT_SLOT_X0, NUT_SLOT_X1 = -15.1, -4.6  # opens at the pad's inboard face
-SCREW_RELIEF_Z0 = 68.0        # leaves 1 mm of wall before the plate face
+# The plate under these pockets is printed as a bridge across the open duct,
+# so whatever is left beneath a pocket is the first bridged layers with nothing
+# above to pull them flat. Keep at least 1.5 mm of floor.
+SCREW_RELIEF_Z0 = 68.5        # 1.5 mm of plate before the relief bore starts
 # Outboard side wall: the stock ear's outboard face is open behind the 2 mm
 # flange, exposing the duct interior to outside air. A 2 mm wall closes it,
 # attached along the inboard structure's outer face (x = 0), with a 0.6 mm
