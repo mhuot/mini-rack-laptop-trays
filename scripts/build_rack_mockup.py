@@ -42,6 +42,7 @@ ROD_Z0, ROD_Z1 = -EAR_PLATE, -EAR_PLATE + 243.0
 BAR_Z0, BAR_Z1 = 272.0, 276.0
 FAN_CENTERS_X = (-72.0, -24.0, 24.0, 72.0)
 DUCT_X = 97.22          # half of the 194.44 panel, into the ear groove floors
+DUCT_PANEL_THICKNESS = 2.2
 
 SLOTS = [
     {"u_bottom": RU, "laptop": "surface", "label": "U2 Surface Laptop 13.8"},
@@ -56,9 +57,18 @@ def run(_context: str):
     temp_mgr = adsk.fusion.TemporaryBRepManager.get()
 
     def find_doc(prefix):
+        # Exact first: "MacBook Pro Rear Ear" is a prefix of
+        # "MacBook Pro Rear Ear v2 Parametric", so a plain startswith can
+        # silently pick up the wrong document when both are open.
         for doc in app.documents:
-            if doc.name.startswith(prefix):
+            if doc.name == prefix:
                 return doc
+        matches = [doc for doc in app.documents if doc.name.startswith(prefix)]
+        if len(matches) == 1:
+            return matches[0]
+        if matches:
+            raise RuntimeError("'%s' is ambiguous: %s"
+                               % (prefix, [doc.name for doc in matches]))
         raise RuntimeError("Document '%s' is not open" % prefix)
 
     def grab_bodies(doc_prefix, body_names):
@@ -74,10 +84,12 @@ def run(_context: str):
         return out
 
     front_ear_src = grab_bodies("MacBook Pro Front Ear", ["Front Ear"])[0]
-    rear_parts = grab_bodies("MacBook Pro Rear Ear", ["Rear Ear", "Back Plate"])
-    rear_ear_src = rear_parts[0]
-    temp_mgr.booleanOperation(rear_ear_src, rear_parts[1],
-                              adsk.fusion.BooleanTypes.UnionBooleanType)
+    # The v2 parametric document is the real part: duct capture rails, boss
+    # pad, insert pockets, side wall and reliefs are all in it already. The
+    # mockup used to copy the original ear and bolt approximations of those
+    # on as boxes, which drifted from what actually gets printed.
+    rear_ear_src = grab_bodies(
+        "MacBook Pro Rear Ear v2 Parametric", ["Rear Ear"])[0]
     macbook_src = grab_bodies("Brackets for Speaker Stand v2",
                               ["REF MacBook Pro 14"])[0]
 
@@ -186,25 +198,6 @@ def run(_context: str):
                         [0, 1, 0, y0],
                         [0, 0, 1, RAIL_DEPTH]])
             ear = placed(rear_ear_src, m)
-            # Full-face boss pad: one flat landing level for the fan bar
-            rib = box(sign * (EAR_OFFSET_X - 15.0), sign * EAR_OFFSET_X,
-                      y0, y0 + 44.45, 269.0, 272.0)
-            temp_mgr.booleanOperation(
-                ear, rib, adsk.fusion.BooleanTypes.UnionBooleanType)
-            # Outboard side wall closes the ear's open side window
-            wall = box(sign * (EAR_OFFSET_X + 0.0), sign * (EAR_OFFSET_X + 2.0),
-                       y0, y0 + 44.45, 200.0, 272.0)
-            temp_mgr.booleanOperation(
-                ear, wall, adsk.fusion.BooleanTypes.UnionBooleanType)
-            relief = box(sign * (EAR_OFFSET_X - 0.05),
-                         sign * (EAR_OFFSET_X + 0.65),
-                         y0 + 9.7, y0 + 34.7, 199.9, 267.1)
-            temp_mgr.booleanOperation(
-                ear, relief, adsk.fusion.BooleanTypes.DifferenceBooleanType)
-            for row in (15.0, 29.45):
-                pocket = cyl_z(sign * ROD_X, y0 + row, 268.8, 272.1, 4.0)
-                temp_mgr.booleanOperation(
-                    ear, pocket, adsk.fusion.BooleanTypes.DifferenceBooleanType)
             bodies.append(("%s rear ear v2 %s" % (label, side), ear))
 
         # Rods
@@ -220,16 +213,19 @@ def run(_context: str):
             opening = cyl_z(fan_x, y0 + 22.225, BAR_Z0 - 1, BAR_Z1 + 1, 39.0)
             temp_mgr.booleanOperation(
                 bar, opening, adsk.fusion.BooleanTypes.DifferenceBooleanType)
-        # The panels ride in the ears' capture rails: 2 mm walls put the
-        # 2.4 mm slots at y 2.0-4.4 and 40.05-42.45, so a 2 mm panel centres
-        # at 2.2-4.2 and 40.25-42.25.
-        duct_top = box(-DUCT_X, DUCT_X, y0 + 40.25, y0 + 42.25, 202.0, BAR_Z0)
-        duct_bottom = box(-DUCT_X, DUCT_X, y0 + 2.2, y0 + 4.2, 202.0, BAR_Z0)
-        temp_mgr.booleanOperation(bar, duct_top,
-                                  adsk.fusion.BooleanTypes.UnionBooleanType)
-        temp_mgr.booleanOperation(bar, duct_bottom,
-                                  adsk.fusion.BooleanTypes.UnionBooleanType)
-        bodies.append(("%s fan bar" % label, bar))
+        bodies.append(("%s fan plate" % label, bar))
+
+        # Separate parts now, not a shell on the plate. They ride in the ears'
+        # capture rails -- 2 mm walls put the 2.4 mm slots at y 2.0-4.4 and
+        # 40.05-42.45 -- and run from the rear rail face to 2 mm into the
+        # capture groove in the fan plate, so 74 mm long. Drawn resting on the
+        # lower wall of each slot, which is where gravity puts them.
+        duct_z0, duct_z1 = RAIL_DEPTH, RAIL_DEPTH + 74.0
+        for tag, panel_y0 in (("top", 40.05), ("bottom", 2.0)):
+            bodies.append((
+                "%s duct panel %s" % (label, tag),
+                box(-DUCT_X, DUCT_X, y0 + panel_y0,
+                    y0 + panel_y0 + DUCT_PANEL_THICKNESS, duct_z0, duct_z1)))
 
         # Fan placeholders: 40x40x20 frame with bore and hub
         for fan_x in FAN_CENTERS_X:
@@ -310,6 +306,8 @@ def run(_context: str):
                              "Smoked Acrylic", rgb=(40, 40, 46))
 
     def pick_appearance(name):
+        if "duct" in name:
+            return orange_print   # a printed duct panel, not the acrylic kind
         if "panel" in name:
             return acrylic
         if "foot" in name:
@@ -331,7 +329,7 @@ def run(_context: str):
         added = root.bRepBodies.add(body)
         added.name = name
         added.appearance = pick_appearance(name)
-        if "panel" in name.lower():
+        if "panel" in name.lower() and "duct" not in name.lower():
             added.opacity = 0.3  # smoked acrylic reads see-through in renders
 
     app.activeViewport.fit()

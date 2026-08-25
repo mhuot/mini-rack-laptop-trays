@@ -45,6 +45,8 @@ ROUGHNESS = {"rod": 0.35}
 def classify(stem: str) -> str:
     """Map an exported body filename to a palette group."""
     lower = stem.lower()
+    if "duct" in lower:
+        return "print"          # a printed duct panel, not the acrylic kind
     if "panel" in lower:
         return "panel"
     if "foot" in lower:
@@ -55,8 +57,8 @@ def classify(stem: str) -> str:
         return "macbook"
     if "ref" in lower and "surface" in lower:
         return "surface"
-    if "fan_bar" in lower:
-        return "print"
+    if "fan_bar" in lower or "fan_plate" in lower:
+        return "print"          # the printed plate, not a Noctua
     if "fan" in lower:
         return "fan"
     if "rod" in lower:
