@@ -58,7 +58,7 @@ def classify(stem: str) -> str:
         return "macbook"
     if "ref" in lower and "surface" in lower:
         return "surface"
-    if "fan_bar" in lower or "fan_plate" in lower:
+    if "fan_plate" in lower:
         return "print"          # the printed plate, not a Noctua
     if "fan" in lower:
         return "fan"
