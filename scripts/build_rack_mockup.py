@@ -80,6 +80,12 @@ SLOTS = [
 ]
 
 SURFACE_L, SURFACE_W, SURFACE_T = 301.0, 220.0, 17.5
+MACBOOK_L = 312.6
+# The laptop channel through the rear ear is open to local z = 65, where the
+# back plate starts; that face is what the laptop's rear edge stops against.
+# Measured on exports/rear_ear_v2.stl, not assumed.
+LAPTOP_CHANNEL_CLOSES = 65.0
+LAPTOP_STOP_Z = RAIL_DEPTH + LAPTOP_CHANNEL_CLOSES
 
 
 def run(_context: str):
@@ -269,20 +275,23 @@ def run(_context: str):
                 fan, hub, adsk.fusion.BooleanTypes.UnionBooleanType)
             bodies.append(("%s fan" % label, fan))
 
-        # Laptop
+        # Laptop. The rear edge stops where the ear's laptop channel closes and the
+        # back plate begins, measured on the exported part at local z = 65.
         if slot["laptop"] == "macbook":
             # Source lies flat: x=length(312.6), y=width(221.2), z=thick.
             # Map (lx,ly,lz) -> (ly, lz, lx): width across, thickness up,
-            # length rearward; rear edge lands on the back plates at z=267.
+            # length rearward; rear edge lands on the back plates.
             m = matrix([[0, 1, 0, -1.4],
                         [0, 0, 1, y0 + 5.42],
-                        [1, 0, 0, 110.7]])
+                        # source body is centred on its length, so the
+                        # translation is the stop less half of it
+                        [1, 0, 0, LAPTOP_STOP_Z - MACBOOK_L / 2]])
             bodies.append(("REF MacBook Pro 14 (U3)", placed(macbook_src, m)))
         else:
             bodies.append(("REF Surface Laptop 13.8 (U2)",
                            box(-SURFACE_W / 2, SURFACE_W / 2,
                                y0 + 10.22, y0 + 10.22 + SURFACE_T,
-                               267.0 - SURFACE_L, 267.0)))
+                               LAPTOP_STOP_Z - SURFACE_L, LAPTOP_STOP_Z)))
 
     # --- Emit into a new direct-modeling document ---
     # Design coordinates use y-up / z-rearward; Fusion's world is z-up with
