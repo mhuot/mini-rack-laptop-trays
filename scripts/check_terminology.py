@@ -3,14 +3,19 @@
     python scripts/check_terminology.py
 
 Every part in this project has exactly one name. The names drifted once --
-the same bracket was an "ear" in the README and a "bracket" in the print
-plate filenames, and the same slab was a "fan bar" in the prose and a "fan
-plate" in the CAD -- so this pins them down. Standard library only, no
-install needed, runs in well under a second.
+the same part went by one name in the README and another in the print plate
+filenames, and a second part disagreed with itself between the prose and the
+CAD -- so this pins them down. Standard library only, no install needed,
+runs in well under a second.
 
 Add a case to RULES when you retire a name. Add a case to ALLOWED when a
 retired word is genuinely the right one in some specific spot, and say why
 in the note -- an unexplained exemption is how the drift started.
+
+A file that has to spell out the retired names, like this one and CLAUDE.md,
+brackets that stretch with "terminology-check: ignore" and
+"terminology-check: resume" comments, so only that stretch is skipped and
+the prose around it is still checked.
 """
 
 import re
@@ -21,9 +26,14 @@ ROOT = Path(__file__).resolve().parent.parent
 SEARCH = ("*.md", "*.html", "*.py")
 SKIP_DIRS = {".git", "exports", "cad", "docs/images", "docs/models"}
 
+# terminology-check: ignore
 # (retired pattern, the term to use instead, why)
 RULES = [
-    (r"\bbrackets?\b", "ear / front ear / rear ear",
+    # Square/curly/angle brackets and bracket notation are not this project's
+    # parts. Excluding them here keeps ALLOWED for genuine one-off exemptions
+    # rather than filling it with punctuation.
+    (r"(?<!square )(?<!curly )(?<!angle )(?<!round )\bbrackets?\b(?! notation)",
+     "ear / front ear / rear ear",
      "the printed parts that bolt to the rack rails are ears"),
     (r"\bfan bars?\b", "fan plate",
      "the Fusion body is named Rear Fan Plate and it is a flat 4 mm slab"),
@@ -33,8 +43,8 @@ RULES = [
      "matches the Fusion feature already named Duct rail"),
     (r"\bear rails?\b", "duct rail",
      "matches the Fusion feature already named Duct rail"),
-    (r"rear_fan_bar", "rear_fan_plate",
-     "renamed in the ear/fan plate cleanup"),
+    (r"fan_bar", "fan_plate",
+     "renamed in the ear/fan plate cleanup; covers rear_fan_bar too"),
     (r"print_plate_brackets", "print_plate_ears",
      "renamed in the ear/fan plate cleanup"),
 ]
@@ -47,11 +57,15 @@ ALLOWED = [
     ("scripts/build_rack_mockup.py", "Brackets for Speaker Stand v2",
      "the exact name of a legacy Fusion document that grab_bodies() opens. "
      "Renaming the file would not rename the document inside Fusion."),
-    ("scripts/check_terminology.py", "",
-     "this file names every retired term on purpose."),
-    ("CLAUDE.md", "",
-     "the conventions file names every retired term on purpose."),
 ]
+
+# Both this file and CLAUDE.md have to name the retired terms to do their job,
+# but exempting them wholesale left the conventions file as the one place the
+# convention was not enforced. Instead they mark just the stretch that needs
+# it, so the prose around it is still checked.
+# terminology-check: resume
+IGNORE_START = "terminology-check: ignore"
+IGNORE_RESUME = "terminology-check: resume"
 
 
 def allowed(rel_path, line):
@@ -77,8 +91,15 @@ def main():
             lines = path.read_text(encoding="utf-8").splitlines()
         except UnicodeDecodeError:
             continue
+        ignoring = False
         for number, line in enumerate(lines, start=1):
-            if allowed(rel, line):
+            if IGNORE_START in line:
+                ignoring = True
+                continue
+            if IGNORE_RESUME in line:
+                ignoring = False
+                continue
+            if ignoring or allowed(rel, line):
                 continue
             for pattern, replacement, why in RULES:
                 if re.search(pattern, line, re.IGNORECASE):

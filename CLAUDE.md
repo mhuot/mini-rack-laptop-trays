@@ -2,11 +2,13 @@
 
 ## Terminology
 
-Every part has exactly one name. These names drifted once and were settled
-in one pass — the same part was an "ear" in the README and a "bracket" in
-the print plate filenames, and the same slab was a "fan bar" in the prose
-and a "fan plate" in the CAD. Use the left column and nothing else, in
-prose, comments, identifiers, and filenames alike.
+Every part has exactly one name. They drifted once — the same part went by
+one name in the README and another in the print plate filenames, and a
+second part disagreed with itself between the prose and the CAD — and were
+settled in a single pass. Use the left column and nothing else, in prose,
+comments, identifiers, and filenames alike.
+
+<!-- terminology-check: ignore -->
 
 | Use | Not | Why this one |
 |---|---|---|
@@ -25,6 +27,8 @@ Two places keep a retired word on purpose:
 - `scripts/build_rack_mockup.py` — `Brackets for Speaker Stand v2` is the
   exact name of a legacy Fusion document that `grab_bodies()` opens.
   Renaming the file would not rename the document inside Fusion.
+
+<!-- terminology-check: resume -->
 
 Run `python scripts/check_terminology.py` before you commit. It greps for
 the retired names, exits nonzero on a hit, and knows about both exceptions
