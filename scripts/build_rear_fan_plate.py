@@ -1,22 +1,22 @@
-"""Fusion 360 script: build the 1U rear exhaust fan bar for the MacBook Pro tray.
+"""Fusion 360 script: build the 1U rear exhaust fan plate for the MacBook Pro tray.
 
 Run inside Fusion via the MCP execute tool. Creates a new unsaved design
-document containing a single body, "Rear Fan Bar".
+document containing a single body, "Rear Fan Plate".
 
 v2 — mounts to the REAR EAR BACK PLATES, not the rack rails. The rear ears
-extend 67 mm behind the rear rail (rear_depth 65 + thickness 2), so the bar
+extend 67 mm behind the rear rail (rear_depth 65 + thickness 2), so the plate
 sits just behind the laptop's rear edge, screwed with M3 socket-head screws
 into CNC Kitchen M3 x 3 short heat-set inserts in the Rear Ear v2 bosses
 (built by build_rear_ear_v2.py).
 
 Design intent (all values in mm):
-- Back plates span x = 95.3..110.3 per side (rod line at +/-102.82); the bar
+- Back plates span x = 95.3..110.3 per side (rod line at +/-102.82); the plate
   is 222 wide so its tabs cover the plates while 4x Noctua NF-A4x20 5V fans
   (40x40x20, 32 mm screw pitch) nest between them, exhausting rearward.
-- Bar front face lands on the ear bosses' 3 mm pads; total stack behind the
-  rear rail = 69 (ear) + 3 (pad) + 4 (bar) + 20 (fan) = 96 mm.
+- Plate front face lands on the ear bosses' 3 mm pads; total stack behind the
+  rear rail = 69 (ear) + 3 (pad) + 4 (plate) + 20 (fan) = 96 mm.
 - Integrated duct shell: 1.8 mm top and bottom panels project 72 mm forward
-  from the bar face, spanning between the ear inner faces (x = +/-95.3) and
+  from the plate face, spanning between the ear inner faces (x = +/-95.3) and
   reaching the rear rail plane. The panels sit inboard of the ear flanges and
   of the rack posts, so they run into the open 1U slot with nothing to foul.
   With the ear frames closing the sides, the fans can only draw air from
@@ -29,10 +29,10 @@ import adsk.fusion
 
 MM = 0.1  # Fusion API lengths are in cm
 
-# Overall bar
-BAR_WIDTH = 222.0
-BAR_Y_MIN = 0.4
-BAR_Y_MAX = 44.05
+# Overall plate
+PLATE_WIDTH = 222.0
+PLATE_Y_MIN = 0.4
+PLATE_Y_MAX = 44.05
 PLATE_THICKNESS = 4.0
 
 # Mounting into Rear Ear v2 insert bosses (M3 socket-head screws)
@@ -58,26 +58,26 @@ FAN_OPENING_DIA = 39.0
 FAN_SCREW_PITCH = 32.0
 FAN_SCREW_DIA = 3.6
 
-# Duct panel capture. The panels are held only in the ear rails, 10 mm at each
+# Duct panel capture. The panels are held only in the duct rails, 10 mm at each
 # end, which leaves 170 mm of free 2 mm sheet whose rear edge has nothing
 # holding it against this plate. Butted like that it cannot seal. A shallow
 # groove in the front face turns the butt into a lap: the panel grows to 73 mm
 # and its last millimetre lands in here, which seals the joint and pulls the
 # edge flat at the same time.
 #
-# Along the panel line each fan bore is only ~8.6 mm wide in x, so the groove
-# is solid for about 69% of the panel edge; the rest opens into a fan bore,
+# Along the panel line each fan opening is only ~8.6 mm wide in x, so the groove
+# is solid for about 69% of the panel edge; the rest opens into a fan opening,
 # which is where the air is going anyway.
 DUCT_GROOVE = True
 GROOVE_DEPTH = 2.0        # 2 mm of lap in a 4 mm plate
 GROOVE_X_HALF = 97.6      # covers the 194.44 panel, stops short of the bosses
 PANEL_THICKNESS = 2.0
-EAR_WALL = 2.0            # rail wall in build_rear_ear_v2.py
-EAR_SLOT_HEIGHT = 2.4     # rail slot in build_rear_ear_v2.py
+EAR_WALL = 2.0            # duct rail wall in build_rear_ear_v2.py
+EAR_SLOT_HEIGHT = 2.4     # duct rail slot in build_rear_ear_v2.py
 RACK_UNIT = 44.45
 
-# The groove is the rail slot continued, not a tighter version of it. The panel
-# has 0.4 mm of play in the ear rail and gravity rests it on the rail's lower
+# The groove is the duct rail slot continued, not a tighter version of it. The panel
+# has 0.4 mm of play in the duct rail and gravity rests it on the rail's lower
 # wall, so a groove sized to the panel rather than to the slot would sit 0.1 mm
 # high and the plate would jam on the panel edge instead of seating on the pads.
 GROOVE_BANDS = (
@@ -111,7 +111,7 @@ def run(_context: str):
     # 1. Base plate
     plate_sketch = root.sketches.add(root.xYConstructionPlane)
     plate_sketch.sketchCurves.sketchLines.addTwoPointRectangle(
-        point(-BAR_WIDTH / 2, BAR_Y_MIN), point(BAR_WIDTH / 2, BAR_Y_MAX))
+        point(-PLATE_WIDTH / 2, PLATE_Y_MIN), point(PLATE_WIDTH / 2, PLATE_Y_MAX))
     plate = extrudes.addSimple(
         plate_sketch.profiles.item(0),
         adsk.core.ValueInput.createByReal(PLATE_THICKNESS * MM),
@@ -169,7 +169,7 @@ def run(_context: str):
     extrudes.add(cbore_cut)
 
     # 5. Duct panel capture grooves in the front face (the face that lands on
-    #    the ear pads). Cut last so it takes whatever the fan bores left.
+    #    the ear pads). Cut last so it takes whatever the fan openings left.
     if DUCT_GROOVE:
         groove_sketch = root.sketches.add(root.xYConstructionPlane)
         for band_y0, band_y1 in GROOVE_BANDS:

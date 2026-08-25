@@ -1,4 +1,4 @@
-"""Fusion 360 script: blanking plug for unused fan bar openings.
+"""Fusion 360 script: blanking plug for unused fan plate openings.
 
 Run inside Fusion via the MCP execute tool. Creates a new parametric
 document with a human-usable timeline (named sketches and features), per
@@ -6,7 +6,7 @@ the project rule that everything Claude builds in Fusion stays editable.
 
 For running two fans instead of four, the empty openings must be blocked
 or the running fans pull backflow through them. The plug press-fits into
-a bar opening from the rear (fan side). The flange seats on the bar's
+a plate opening from the rear (fan side). The flange seats on the plate's
 rear face, and duct suction pushes the plug tighter rather than out.
 Print flange-down, no supports. To remove, drive an M3 screw a couple
 turns into the center pilot and pull.
@@ -19,7 +19,7 @@ MM = 0.1  # Fusion API lengths are in cm
 
 FLANGE_DIA = 43.0
 FLANGE_THICK = 1.6
-BODY_DIA = 38.7          # press fit in the bar's 39.0 opening
+BODY_DIA = 38.7          # press fit in the plate's 39.0 opening
 BODY_DEPTH = 4.0         # fills the plate thickness, flush with the duct side
 PULLER_PILOT_DIA = 2.5   # M3 screw threads in as a puller
 

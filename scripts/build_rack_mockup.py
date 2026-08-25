@@ -7,14 +7,14 @@ Creates a new unsaved direct-modeling document containing:
 - Simplified GeeekPi 4U 10-inch frame (posts, top/bottom slabs; rail-to-rail
   depth 200 mm, hole span 236.525 mm)
 - U3: MacBook Pro 14 tray — front/rear ears (mirrored pairs, rear with insert
-  bosses), 4x 8 mm rods, ducted fan bar, 4 fan placeholders, and the copied
+  bosses), 4x 8 mm rods, ducted fan plate, 4 fan placeholders, and the copied
   'REF MacBook Pro 14' body
 - U2: identical tray for the Surface Laptop 13.8 with a new
   'REF Surface Laptop 13.8' body (301 x 220 x 17.5)
 
 Global frame (mm): x = 0 at rack centerline, y = 0 at bottom of U1,
 z = 0 at the front rail mounting face, +z rearward. Rod line at +/-102.82;
-rear rail face at z = 200; back plates at z = 267..269; fan bar at 272..276.
+rear rail face at z = 200; back plates at z = 267..269; fan plate at 272..276.
 """
 
 import adsk.core
@@ -39,7 +39,7 @@ POST_X_INNER = 110.5              # rail plates sit outboard of the ear blocks
 # ear's face (z=-2) to ~41 mm inside the rear ears' bores (z=241).
 ROD_Z0, ROD_Z1 = -EAR_PLATE, -EAR_PLATE + 243.0
 
-BAR_Z0, BAR_Z1 = 272.0, 276.0
+FAN_PLATE_Z0, FAN_PLATE_Z1 = 272.0, 276.0
 FAN_CENTERS_X = (-72.0, -24.0, 24.0, 72.0)
 DUCT_X = 97.22          # half of the 194.44 panel, into the ear groove floors
 DUCT_PANEL_THICKNESS = 2.2
@@ -120,7 +120,7 @@ def run(_context: str):
         return out
 
     front_ear_src = grab_bodies("MacBook Pro Front Ear", ["Front Ear"])[0]
-    # The v2 parametric document is the real part: duct capture rails, boss
+    # The v2 parametric document is the real part: duct rails, boss
     # pad, insert pockets, side wall and reliefs are all in it already. The
     # mockup used to copy the original ear and bolt approximations of those
     # on as boxes, which drifted from what actually gets printed.
@@ -243,16 +243,16 @@ def run(_context: str):
                                cyl_z(side * ROD_X, y0 + row, ROD_Z0, ROD_Z1,
                                      ROD_DIA)))
 
-        # Ducted fan bar (visual: fan openings only, no small holes)
-        bar = box(-111, 111, y0 + 0.4, y0 + 44.05, BAR_Z0, BAR_Z1)
+        # Ducted fan plate (visual: fan openings only, no small holes)
+        fan_plate = box(-111, 111, y0 + 0.4, y0 + 44.05, FAN_PLATE_Z0, FAN_PLATE_Z1)
         for fan_x in FAN_CENTERS_X:
-            opening = cyl_z(fan_x, y0 + 22.225, BAR_Z0 - 1, BAR_Z1 + 1, 39.0)
+            opening = cyl_z(fan_x, y0 + 22.225, FAN_PLATE_Z0 - 1, FAN_PLATE_Z1 + 1, 39.0)
             temp_mgr.booleanOperation(
-                bar, opening, adsk.fusion.BooleanTypes.DifferenceBooleanType)
-        bodies.append(("%s fan plate" % label, bar))
+                fan_plate, opening, adsk.fusion.BooleanTypes.DifferenceBooleanType)
+        bodies.append(("%s fan plate" % label, fan_plate))
 
         # Separate parts now, not a shell on the plate. They ride in the ears'
-        # capture rails -- 2 mm walls put the 2.4 mm slots at y 2.0-4.4 and
+        # duct rails -- 2 mm walls put the 2.4 mm slots at y 2.0-4.4 and
         # 40.05-42.45 -- and run from the rear rail face to 2 mm into the
         # capture groove in the fan plate, so 74 mm long. Drawn resting on the
         # lower wall of each slot, which is where gravity puts them.
@@ -361,7 +361,7 @@ def run(_context: str):
             return steel
         if name.endswith("fan"):
             return noctua
-        return orange_print  # printed parts: ears, fan bars
+        return orange_print  # printed parts: ears, fan plates
 
     for name, body in bodies:
         offset = explode_offset(name)

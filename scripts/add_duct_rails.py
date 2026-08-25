@@ -1,4 +1,4 @@
-"""Add the duct panel capture rails to "MacBook Pro Rear Ear v2 Parametric".
+"""Add the duct rails to "MacBook Pro Rear Ear v2 Parametric".
 
 Run through the Fusion MCP against that document. The rails project inboard
 from the ear's inner face into the empty 1U space above and below the laptop,
