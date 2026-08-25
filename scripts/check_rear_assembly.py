@@ -16,7 +16,7 @@ region reaches the edge of the frame, air is getting out somewhere it should
 not. Between z~10 and z~60 the parts are prismatic, so a section there holds
 for that whole stretch rather than being a spot check.
 
-The panel has play in its rail slot, so the seal is tested with the panel
+The panel has play in its duct rail slot, so the seal is tested with the panel
 resting on each wall and floating between them.
 
 Requires trimesh, numpy, scipy and manifold3d.
@@ -35,8 +35,8 @@ EXPORTS = Path("exports")
 EAR_OFFSET_X = 110.32      # ear local x=-15 (inner face) lands at global 95.32
 EAR_DEPTH = 72.0           # rail plane to pad face
 RACK_UNIT = 44.45
-EAR_WALL = 2.0             # rail wall, build_rear_ear_v2.py
-EAR_SLOT_HEIGHT = 2.4      # rail slot, build_rear_ear_v2.py
+EAR_WALL = 2.0             # duct rail wall, build_rear_ear_v2.py
+EAR_SLOT_HEIGHT = 2.4      # duct rail slot, build_rear_ear_v2.py
 PANEL_THICKNESS = 2.2
 GROOVE_FLOOR_X = 97.32     # ear groove floor, per side
 FAN_OPENING_DIA = 39.0
@@ -99,7 +99,7 @@ def assemble(panel_offset):
              z_min=0.0)
     parts["duct_panel_top"] = top
 
-    plate = trimesh.load_mesh(EXPORTS / "rear_fan_bar.stl")
+    plate = trimesh.load_mesh(EXPORTS / "rear_fan_plate.stl")
     plate.apply_translation([0.0, 0.0, EAR_DEPTH])
     parts["fan_plate"] = plate
     return parts
@@ -199,7 +199,7 @@ def report_throat():
     print("\n=== worst case, a panel clear of both slot walls ===")
     print(f"  panel end to ear groove floor : {end_clearance:.2f} mm")
     print(f"  throttling area, 4 panel ends : {throat:.2f} mm2")
-    print(f"  four fan bores                : {fan_area:.0f} mm2")
+    print(f"  four fan openings             : {fan_area:.0f} mm2")
     print(f"  leak as a share of fan area   : {throat / fan_area * 100:.3f}%")
 
 

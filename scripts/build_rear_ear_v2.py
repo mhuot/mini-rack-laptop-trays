@@ -1,4 +1,4 @@
-"""Fusion 360 script: build Rear Ear v2 = existing Rear Ear + fan bar bosses.
+"""Fusion 360 script: build Rear Ear v2 = existing Rear Ear + fan plate bosses.
 
 Run inside Fusion via the MCP execute tool with the 'MacBook Pro Rear Ear'
 document open. Copies the proven 'Rear Ear' and 'Back Plate' bodies unchanged,
@@ -8,8 +8,8 @@ result lands in a new unsaved direct-modeling document as one printable body.
 
 The bosses live in a single full-height rib (9 wide x 3 proud, z = 69..72)
 running down the plate's rear face on the rod line (x = -7.5). The rib
-lands the fan bar at the same 3 mm standoff as the earlier round pads but
-seals the side gap between the back plate and the bar, so the duct can't
+lands the fan plate at the same 3 mm standoff as the earlier round pads but
+seals the side gap between the back plate and the fan plate, so the duct can't
 draw leak air around the plate edges. Insert pockets sit at y = 15.0 and
 29.45 — symmetric about the 1U mid-height (22.225), clear of the 8 mm rod
 holes — and are blind, leaving 1.8 mm of plate in front so nothing pokes
@@ -38,7 +38,7 @@ RIB_Z_START = 69.0
 # Nut-trap variant (no inserts, metal threads): set NUT_TRAP = True — the
 # rib grows to 5 mm proud and each boss gets a side-loading slot for a
 # standard M3 hex nut (a DIN 562 square nut fits the same slot). The fan
-# bar sits 2 mm further back; the same M3 x 8 screws work, with a relief
+# fan plate sits 2 mm further back; the same M3 x 8 screws work, with a relief
 # bore so the screw tip stops well short of the laptop-facing plate.
 NUT_TRAP = False
 RIB_Z_END = 74.0 if NUT_TRAP else 72.0
@@ -78,7 +78,7 @@ TANGENCY_Y0, TANGENCY_Y1 = 10.10, 34.35
 #
 # A groove cut into the inner face alone gripped the panel over only 2 mm and
 # left a 0.4 mm lip at the 1U edge. Instead the material is added inboard: a
-# rail projects into the empty space above and below the laptop and carries
+# duct rail projects into the empty space above and below the laptop and carries
 # the slot with it, so the panel is held over 12 mm at the same size. Walls are
 # 2 mm to match the rest of the design and the slot is 2.4 for a 2.0 panel,
 # which leaves 0.2 mm of slip per face.
@@ -173,7 +173,7 @@ def run(_context: str):
         combined, laptop_relief, adsk.fusion.BooleanTypes.DifferenceBooleanType)
 
     if DUCT_GROOVE:
-        # Add the rails first, then cut the slot through rail and ear together
+        # Add the duct rails first, then cut the slot through rail and ear together
         # so the panel still bottoms out on the original groove floor.
         for y0, y1 in ((RIB_Y_MIN, RIB_Y_MIN + RAIL_BLOCK_HEIGHT),
                        (RIB_Y_MAX - RAIL_BLOCK_HEIGHT, RIB_Y_MAX)):

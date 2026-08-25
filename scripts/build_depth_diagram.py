@@ -126,7 +126,7 @@ def draw(ax, name, length, thickness, colour, stop_z):
 
     dimension(ax, -13.0, front, 0.0, f"{-front:.1f} out the front")
     dimension(ax, -13.0, RAIL_DEPTH, stop_z,
-              f"{stop_z - RAIL_DEPTH:.0f} into the bracket")
+              f"{stop_z - RAIL_DEPTH:.0f} into the ear")
     dimension(ax, RACK_UNIT + 16.0, 0.0, RAIL_DEPTH, f"{RAIL_DEPTH:.0f} rail to rail")
     dimension(ax, RACK_UNIT + 16.0, RAIL_DEPTH, RAIL_DEPTH + EAR_DEPTH,
               f"{EAR_DEPTH:.0f} ear")
@@ -170,7 +170,7 @@ def main():
               f"noses {-front:.1f} mm past the front rail")
 
     figure.suptitle(
-        "How far the laptops reach into the rear brackets  ·  side section, "
+        "How far the laptops reach into the rear ears  ·  side section, "
         "both trays identical", fontsize=14, weight="bold", color=INK, y=.98)
     figure.text(.5, .015,
                 "Rear edge stops where the ear's laptop channel closes and the "

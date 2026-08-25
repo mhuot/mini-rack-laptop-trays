@@ -73,10 +73,10 @@ BEDS = {"coreone": (250.0, 220.0), "mini": (180.0, 180.0)}
 
 def build_parts(variant):
     """Two sets. The duct set is what you reprint when the fan layout
-    changes; the brackets are print-once and independent of it."""
+    changes; the ears are print-once and independent of it."""
     front = trimesh.load_mesh(EXPORTS / "front_ear.stl")
     rear = trimesh.load_mesh(EXPORTS / REAR_EAR_FILES[variant])
-    plate = trimesh.load_mesh(EXPORTS / "rear_fan_bar.stl")
+    plate = trimesh.load_mesh(EXPORTS / "rear_fan_plate.stl")
     plug = trimesh.load_mesh(EXPORTS / "fan_plug.stl")
     panel = trimesh.load_mesh(EXPORTS / "duct_panel.stl")
 
@@ -97,7 +97,7 @@ def build_parts(variant):
             # comes out as an open pocket instead.
             ("rear_fan_plate", flipped(plate)),
         ],
-        f"brackets_{variant}": [
+        f"ears_{variant}": [
             ("rear_ear_R", rear.copy()),
             ("rear_ear_L", mirrored(rear)),
             ("front_ear_R", front.copy()),
@@ -183,7 +183,7 @@ def main():
     parser.add_argument("--bed", choices=sorted(BEDS), default="coreone",
                         help="target printer bed")
     parser.add_argument("--set", dest="which", default=None,
-                        help="only emit this set, e.g. brackets_heatset")
+                        help="only emit this set, e.g. ears_heatset")
     args = parser.parse_args()
     bed = BEDS[args.bed]
     suffix = "" if args.bed == "coreone" else "_" + args.bed
