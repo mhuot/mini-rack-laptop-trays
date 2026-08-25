@@ -44,6 +44,36 @@ FAN_CENTERS_X = (-72.0, -24.0, 24.0, 72.0)
 DUCT_X = 97.22          # half of the 194.44 panel, into the ear groove floors
 DUCT_PANEL_THICKNESS = 2.2
 
+# Exploded view. 0 is assembled, 1 is fully apart; the driver sweeps it to
+# animate the parts flying out and back. Offsets are in model coordinates
+# (x across the rack, y up within the 1U, z rearward) and each part travels
+# along the direction it is actually assembled from, so the animation reads
+# as a disassembly rather than a scatter. The rack itself stays put.
+EXPLODE = 0.0
+
+EXPLODE_MOVES = (
+    ("front ear", (30.0, 0.0, -55.0)),
+    ("rear ear", (30.0, 0.0, 30.0)),
+    ("rod", (0.0, 0.0, -85.0)),
+    ("duct panel top", (0.0, 60.0, 45.0)),
+    ("duct panel bottom", (0.0, -60.0, 45.0)),
+    ("fan plate", (0.0, 0.0, 95.0)),
+    ("fan", (0.0, 0.0, 145.0)),
+    ("ref ", (0.0, 0.0, -130.0)),
+)
+
+
+def explode_offset(name):
+    """Displacement for a body at the current EXPLODE factor, or None."""
+    if EXPLODE <= 0.0:
+        return None
+    lower = name.lower()
+    for key, (dx, dy, dz) in EXPLODE_MOVES:
+        if key in lower:
+            side = -1.0 if lower.rstrip().endswith(" l") else 1.0
+            return (side * dx * EXPLODE, dy * EXPLODE, dz * EXPLODE)
+    return None          # frame, acrylic panels and feet hold still
+
 SLOTS = [
     {"u_bottom": RU, "laptop": "surface", "label": "U2 Surface Laptop 13.8"},
     {"u_bottom": 2 * RU, "laptop": "macbook", "label": "U3 MacBook Pro 14"},
@@ -325,6 +355,12 @@ def run(_context: str):
         return orange_print  # printed parts: ears, fan bars
 
     for name, body in bodies:
+        offset = explode_offset(name)
+        if offset is not None:
+            shift = adsk.core.Matrix3D.create()
+            shift.translation = adsk.core.Vector3D.create(
+                offset[0] * MM, offset[1] * MM, offset[2] * MM)
+            temp_mgr.transform(body, shift)
         temp_mgr.transform(body, world)
         added = root.bRepBodies.add(body)
         added.name = name

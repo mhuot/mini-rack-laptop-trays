@@ -24,6 +24,7 @@ import trimesh
 from PIL import Image
 
 GIF_PATH = Path("docs/images/rack-turntable.gif")
+EXPLODE_GIF_PATH = Path("docs/images/rack-explode.gif")
 GLB_PATH = Path("docs/models/rack-mockup.glb")
 
 # sRGB, matching the appearances in build_rack_mockup.py
@@ -116,8 +117,35 @@ def build_glb(parts_dir: Path) -> None:
     print(f"GLB: {GLB_PATH} ({GLB_PATH.stat().st_size / 1e6:.2f} MB); groups: {counts}")
 
 
+def build_explode_gif(explode_dir: Path) -> None:
+    """Ping-pong the explode states so the parts fly out and back in.
+
+    The states are rendered open-only; playing them forward then backward
+    gives the return trip for free and guarantees a seamless loop. Both ends
+    hold for a beat so the assembled and exploded views are readable.
+    """
+    states = sorted(explode_dir.glob("state_*.png"))
+    if not states:
+        raise SystemExit(f"no explode states found in {explode_dir}")
+    frames = [Image.open(path).convert("RGB") for path in states]
+    sequence = frames + frames[-2:0:-1]
+    hold = 900
+    step = 70
+    durations = [step] * len(sequence)
+    durations[0] = hold
+    durations[len(frames) - 1] = hold
+    sequence[0].save(
+        EXPLODE_GIF_PATH, save_all=True, append_images=sequence[1:],
+        duration=durations, loop=0, optimize=True)
+    size = EXPLODE_GIF_PATH.stat().st_size / 1e6
+    print(f"explode GIF: {EXPLODE_GIF_PATH} ({size:.2f} MB, "
+          f"{len(sequence)} frames from {len(frames)} states)")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--explode-dir", type=Path, default=None,
+                        help="directory of exploded-state PNGs (state_*.png)")
     parser.add_argument("--parts-dir", type=Path, required=True,
                         help="directory of per-body STL exports")
     parser.add_argument("--frames-dir", type=Path, required=True,
@@ -125,6 +153,8 @@ def main() -> None:
     args = parser.parse_args()
     build_gif(args.frames_dir)
     build_glb(args.parts_dir)
+    if args.explode_dir:
+        build_explode_gif(args.explode_dir)
 
 
 if __name__ == "__main__":
