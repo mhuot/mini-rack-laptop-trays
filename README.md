@@ -8,6 +8,10 @@ Each laptop slides in and out like a drawer on four 8 mm smooth rods, held by 3D
 
 ![Turntable spin of the full rack](docs/images/rack-turntable.gif)
 
+![Exploded view of one tray flying apart and back together](docs/images/rack-explode.gif)
+
+Every printed part in the bill of materials is in there, except the fan opening plug — that one only exists if you run two fans instead of four, and this shows four. Fasteners are not modelled.
+
 Want to spin it yourself? **[Open the interactive 3D viewer](https://mhuot.github.io/mini-rack-laptop-trays/)** — full color, drag to orbit, scroll to zoom. GitHub also renders **[docs/rack-mockup.stl](docs/rack-mockup.stl)** with its built-in STL viewer. (Both are visual mockups, not print files — the printable STLs live in [`exports/`](exports/). Printed parts are shown in orange; print in whatever color you like.)
 
 ## How it works
