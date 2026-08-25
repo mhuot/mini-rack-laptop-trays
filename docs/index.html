@@ -113,6 +113,8 @@
   </div>
   <p>The laptops ran warm in the confined space and their fans kept spinning up. Not healthy. The fix is a plate that mounts to the back of the rear ears and holds four <a href="https://www.amazon.com/Noctua-NF-A4x20-5V-3-Pin-Premium/dp/B072Q3CMRW">Noctua NF-A4x20 5V</a> fans. 40mm is the biggest fan that stands upright inside a single rack unit, and four of them together draw less than half an amp, so a tray runs off any USB port. The fans ship with screws and a solderless splice kit, you supply one old USB cable per tray. No power supply, no soldering. The one warning is to skip generic USB fan adapters, most of them quietly boost to 12V and a 5V fan will not survive that.</p>
   <p>The plate is more than a fan holder. Printed duct panels close off the top and bottom behind the laptop, walls on the ears close the sides, and the rack itself has solid acrylic panels. The only way in is the front of the rack, so the fans have to pull their air across the top and bottom of the laptop to get it. That is the whole trick.</p>
+  <p>The duct used to be part of the plate. One piece, four hours to print, most of it wall, and every change to the fan layout meant printing the wall again. Now it is three pieces. A flat plate, and two sheets that slide into rails on the ears. The rails reach into the dead space above and below the laptop, which was doing nothing anyway.</p>
+  <p>Getting the sheets to actually seal took longer than drawing them. They only grip 10mm at each end, so 170mm of the back edge had nothing holding it against the plate, and a butt joint over that distance does not seal. So the plate got a groove for the edge to sit in. Then they were 2mm sheets in a 2.4mm slot, which is 0.4mm of room to rattle in next to four fans, so they became 2.2mm. None of that shows up in a photo. All of it was the difference between a duct and two loose panels.</p>
   <p>Is four fans overkill. Probably. My napkin math says two move enough air for normal work, and four is margin for a pinned CPU in July. The bar has four openings either way, so the repo includes a printed plug for the empty ones. Start with two fans and two plugs, and if the thermometer disagrees, pull the plugs and add two more. No reprint.</p>
   <p>About the colors. The printed parts render in Prusa orange because that is what is loaded in my printer. Print yours in anything. The fans are that famous Noctua brown, the color nobody asks for and everybody recognizes. Those you are stuck with.</p>
   <p>I have not thermal tested it yet. The plate exists, the fans are specified, and I do not know yet if it solves the heat. That will be its own evening with a thermometer and probably its own disappointment.</p>
@@ -121,9 +123,9 @@
   <p>Everything is in the repo, MIT licensed.</p>
   <ul>
     <li>STLs for every part, verified watertight</li>
-    <li>One-plate 3MF files for PrusaSlicer, a full tray set arranged and mirrored</li>
+    <li>3MF plates for PrusaSlicer, arranged and mirrored. Brackets on one, the duct on two more</li>
     <li>STEP and Fusion 360 files if you want to change things</li>
-    <li>A bill of materials, roughly 350g of PETG plus four fans, four rods, and a handful of M3 hardware</li>
+    <li>A bill of materials. About 165g of PETG per tray, plus four fans, four rods, and a handful of M3 hardware</li>
     <li>Three rear ear options. <a href="https://cnckitchenus.store/products/heat-set-insert-m3-x-3-short-version-100-pieces">Heat-set inserts</a>, plain hex nuts, or screws straight into the plastic</li>
   </ul>
   <p><a class="cta" href="https://github.com/mhuot/mini-rack-laptop-trays">Get the files on GitHub</a></p>
