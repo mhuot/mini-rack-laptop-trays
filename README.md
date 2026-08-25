@@ -21,11 +21,13 @@ Want to spin it yourself? **[Open the interactive 3D viewer](https://mhuot.githu
 | ![Rear fan bars and ducts](docs/images/rack-rear-fans.png) | ![Single tray assembly](docs/images/tray-detail.png) |
 
 - **Front and rear ears** print in mirrored pairs and bolt to the rack rails with standard rack screws. Each ear carries two 8 mm smooth-rod positions, spaced to leave a 24 mm gap — the laptop slides between the rod pairs and rests on the lower rods.
-- **The rear ears extend 67 mm out the back of the rack**, so the laptop's rear edge sits behind the rear rail and stops against the ears' back plates. A MacBook Pro 14 noses ~45 mm out the front; the Surface Laptop 13.8 ~33 mm.
+- **The rear ears extend 72 mm out the back of the rack**, so the laptop's rear edge sits behind the rear rail and stops against the ears' back plates **65 mm in**. A MacBook Pro 14 noses 47.6 mm out the front; the Surface Laptop 13.8, 36.0 mm. The 7 mm left between that stop and the fan plate is the duct exit — the gap the air turns through on its way into the fans.
 - **The fan plate** screws into heat-set inserts in the rear ears' back plates. Four Noctua NF-A4x20 5V fans (40 mm fits upright inside the 44.45 mm rack unit) exhaust rearward. Two 2.2 mm duct panels close the top and bottom of the rear overhang, and the rear ears carry a 2 mm outboard side wall closing their side windows — so the fans can only draw air from inside the rack, sweeping the lid and the underside of the chassis on the way through.
 - **Fan wiring** runs along the rear face of the plate, held clear of the blades by zip ties through the slot pairs between the fan bodies. The outboard pair is strain relief where the bundle leaves for the USB supply. Splices belong outside the rack, near the power source, not pocketed into a 4 mm plate.
 - Laptops run clamshell; all cables exit at the front (orient the Surface with its USB-C edge forward).
 - The RackMate-style cabinet has closed acrylic sides and top, so the front opening is the only intake: the fans drive true front-to-back flow through the slot, and the hinge-side exhaust is entrained in the same rearward stream. No side baffles needed.
+
+![Side section showing how far each laptop reaches into the rear brackets](docs/images/laptop-depth.png)
 
 ## Compatibility
 
