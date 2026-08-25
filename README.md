@@ -145,10 +145,11 @@ Models are built in Fusion 360, driven by the Python scripts in [`scripts/`](scr
 - [`add_duct_rails.py`](scripts/add_duct_rails.py) — adds the duct rails to the parametric rear ear
 - [`fix_insert_pockets.py`](scripts/fix_insert_pockets.py) — cuts the heat-set pockets as one explicit feature
 
-And two that run locally rather than inside Fusion:
+And three that run locally rather than inside Fusion:
 
 - [`check_rear_assembly.py`](scripts/check_rear_assembly.py) — fits the rear parts together and checks for interference and air leaks
 - [`whiten_renders.py`](scripts/whiten_renders.py) — flattens Fusion's viewport gradient to white in the exported renders
+- [`check_terminology.py`](scripts/check_terminology.py) — every part has one name; this fails if a retired one creeps back in. Standard library only, so it just runs.
 
 Fusion API note: all API lengths are centimeters; the scripts define `MM = 0.1` and work in millimeters throughout.
 
