@@ -40,7 +40,7 @@ POST_X_INNER = 110.5              # rail plates sit outboard of the ear blocks
 ROD_Z0, ROD_Z1 = -EAR_PLATE, -EAR_PLATE + 243.0
 
 FAN_PLATE_Z0, FAN_PLATE_Z1 = 272.0, 276.0
-FAN_CENTERS_X = (-72.0, -24.0, 24.0, 72.0)
+FAN_CENTERS_X = (-63.55, 0.0, 63.55)
 DUCT_X = 97.22          # half of the 194.44 panel, into the ear groove floors
 DUCT_PANEL_THICKNESS = 2.2
 

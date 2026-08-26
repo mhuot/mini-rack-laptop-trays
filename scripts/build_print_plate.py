@@ -79,6 +79,7 @@ def build_parts(variant):
     plate = trimesh.load_mesh(EXPORTS / "rear_fan_plate.stl")
     plug = trimesh.load_mesh(EXPORTS / "fan_plug.stl")
     panel = trimesh.load_mesh(EXPORTS / "duct_panel.stl")
+    ducted = trimesh.load_mesh(EXPORTS / "ducted_fan_plate.stl")
 
     return {
         # The duct used to be one plate. Together the three parts fill the bed
@@ -96,6 +97,13 @@ def build_parts(variant):
             # print it over: full first layer, and the groove that has to seal
             # comes out as an open pocket instead.
             ("rear_fan_plate", flipped(plate)),
+        ],
+        # The one-piece alternative: plate and duct walls in a single part.
+        # Printed plate-down so the first layer is the full solid rectangle;
+        # the walls then rise 72 mm as two 2.2 mm fins, which is the cost of
+        # integrating them and the reason the modular duct exists.
+        "ducted_fan_plate": [
+            ("ducted_fan_plate", flipped(ducted)),
         ],
         f"ears_{variant}": [
             ("rear_ear_R", rear.copy()),

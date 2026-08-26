@@ -22,7 +22,7 @@ Want to spin it yourself? **[Open the interactive 3D viewer](https://mhuot.githu
 
 - **Front and rear ears** print in mirrored pairs and bolt to the rack rails with standard rack screws. Each ear carries two 8 mm smooth-rod positions, spaced to leave a 24 mm gap — the laptop slides between the rod pairs and rests on the lower rods.
 - **The rear ears extend 72 mm out the back of the rack**, so the laptop's rear edge sits behind the rear rail and stops against the ears' back plates **65 mm in**. A MacBook Pro 14 noses 47.6 mm out the front; the Surface Laptop 13.8, 36.0 mm. The 7 mm left between that stop and the fan plate is the duct exit — the gap the air turns through on its way into the fans.
-- **The fan plate** screws into heat-set inserts in the rear ears' back plates. Four Noctua NF-A4x20 5V fans (40 mm fits upright inside the 44.45 mm rack unit) exhaust rearward. Two 2.2 mm duct panels close the top and bottom of the rear overhang, and the rear ears carry a 2 mm outboard side wall closing their side windows — so the fans can only draw air from inside the rack, sweeping the lid and the underside of the chassis on the way through.
+- **The fan plate** screws into heat-set inserts in the rear ears' back plates. Three Noctua NF-A4x20 5V fans (40 mm fits upright inside the 44.45 mm rack unit) exhaust rearward, at x = 0 and ±63.55 — the centroids of three equal zones across the duct, so each draws its own third of it. Two 2.2 mm duct panels close the top and bottom of the rear overhang, and the rear ears carry a 2 mm outboard side wall closing their side windows — so the fans can only draw air from inside the rack, sweeping the lid and the underside of the chassis on the way through.
 - **Fan wiring** runs along the rear face of the plate, held clear of the blades by zip ties through the slot pairs between the fan bodies. The outboard pair is strain relief where the bundle leaves for the USB supply. Splices belong outside the rack, near the power source, not pocketed into a 4 mm plate.
 - Laptops run clamshell; all cables exit at the front (orient the Surface with its USB-C edge forward).
 - The RackMate-style cabinet has closed acrylic sides and top, so the front opening is the only intake: the fans drive true front-to-back flow through the slot, and the hinge-side exhaust is entrained in the same rearward stream. No side baffles needed.
@@ -50,11 +50,12 @@ Anything ≤ 222 mm deep and ≤ ~20 mm thick that can hang its side edges on ro
 | Rear Ear v2 (`exports/rear_ear_v2.stl`) | 2 | mirror one; bosses take M3 heat-set inserts |
 | Rear Fan Plate (`exports/rear_fan_plate.stl`) | 1 | flat 4 mm slab, ~45 min |
 | Duct panel (`exports/duct_panel.stl`) | 2 | flat 2.2 mm sheets, 194.4 × 74; slide into the ears' duct rails |
-| Fan opening plug (`exports/fan_plug.stl`) | 0–2 | only if starting with two fans — see below |
+| Fan opening plug (`exports/fan_plug.stl`) | 0–1 | only if starting with two fans — see below |
 
 **Ready-made print plates**, arranged for a 250 × 220 bed and mirrored where needed. Regenerate with `scripts/build_print_plate.py`.
 
 - `exports/print_plate_ears_heatset.3mf` (also `_selftap` / `_nuttrap`) — both rear ears, both front ears, two fan plugs. Print once.
+- `exports/print_plate_ducted_fan_plate.3mf` — the one-piece alternative, if you want it instead of the plate-plus-panels.
 - `exports/print_plate_duct_panels.3mf` and `exports/print_plate_fan_plate.3mf` — the duct set, split across two plates. This is what you reprint when you change the fan layout.
 
 The duct is two plates rather than one because together the three parts fill the bed corner to corner, which put a panel corner 14 mm from the left edge and 8 mm from the front — and that corner is where first layers fail. Split, each plate centres with at least 20 mm clear on every side, brim included.
@@ -71,6 +72,30 @@ Panels are 2.2 mm rather than 2.0 for the same reason a loose hinge rattles: 2.0
 
 `scripts/check_rear_assembly.py` fits the exported STLs together and checks both of these — every pair intersected exactly for interference, then a flood fill of the air in a cross-section to see whether the duct reaches ambient. It currently reports no interference, and a seal with each panel resting against either wall of its slot.
 
+### Why three fans
+
+Three is where the fan openings stop being the restriction. The duct's own free
+area is about 3880 mm² with a MacBook in it and 3498 with the thicker Surface;
+three Ø39 openings are 3584 mm². Two would be 2389 — throttling the duct to 62%
+and leaving a 47.7 mm fan-free span across the middle of the laptop. Four was
+4778, comfortably past the crossover, buying noise rather than air. Three also
+draws 0.3 A, so a tray still runs off any USB port.
+
+Positions are the centroids of three equal-width zones, so no part of the duct
+is more than 31.8 mm from a fan — against 47.7 mm with two.
+
+### The one-piece alternative
+
+`exports/ducted_fan_plate.stl` is the fan plate with the duct walls grown onto
+it: one part instead of three, and no joint to seal because there isn't one.
+Its walls are 194.44 mm wide, the same as the separate panels, so they slide
+into the same duct rails.
+
+It costs you the thing the modular duct was built for. The fan count is fixed
+in the geometry, and the walls print as two 2.2 mm fins standing 72 mm off the
+plate, which is slower and more delicate than two flat sheets. Print it
+plate-down so the first layer is the full solid rectangle.
+
 No heat-set inserts on hand? Two alternatives, same fan plate and M3 × 8 screws either way:
 
 - **Nut-trap** (`exports/rear_ear_v2_nuttrap.stl`) — a slightly taller rib with side-loading slots that capture standard **M3 hex nuts** (a DIN 562 square nut fits the same slot). Metal threads, unlimited assembly cycles, hardware you already have. The fan plate sits 2 mm further back (~98 mm total behind the rear rail).
@@ -85,7 +110,7 @@ A note on all three, because it is not obvious from looking at them: the ear pri
 | Item | Qty | Notes |
 |---|---|---|
 | 8 mm smooth rod, 243 mm | 4 | see [Smooth rods](#smooth-rods) |
-| [Noctua NF-A4x20 5V](https://www.amazon.com/Noctua-NF-A4x20-5V-3-Pin-Premium/dp/B072Q3CMRW) | 2–4 | ships with OmniJoin + fan screws |
+| [Noctua NF-A4x20 5V](https://www.amazon.com/Noctua-NF-A4x20-5V-3-Pin-Premium/dp/B072Q3CMRW) | 2–3 | ships with OmniJoin + fan screws |
 | [M3 × 3 mm heat-set inserts (short)](https://cnckitchenus.store/products/heat-set-insert-m3-x-3-short-version-100-pieces) | 4 | e.g. CNC Kitchen; Ø4.0 × 3.2 pockets (skip for the self-tap ear variant) |
 | M3 × 8 socket-head screws | 4 | |
 | M3 hex nuts | 4 | nut-trap ear variant only |

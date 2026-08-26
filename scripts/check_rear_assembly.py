@@ -40,7 +40,7 @@ EAR_SLOT_HEIGHT = 2.4      # duct rail slot, build_rear_ear_v2.py
 PANEL_THICKNESS = 2.2
 GROOVE_FLOOR_X = 97.32     # ear groove floor, per side
 FAN_OPENING_DIA = 39.0
-FAN_COUNT = 4
+FAN_COUNT = 3
 
 FRAME_X = (-135.0, 135.0)
 FRAME_Y = (-2.0, 47.0)

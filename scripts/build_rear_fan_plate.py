@@ -42,17 +42,20 @@ SCREW_CLEAR_DIA = 3.4
 HEAD_CBORE_DIA = 6.5
 HEAD_CBORE_DEPTH = 2.0
 
-# Wire management. Zip-tie slot pairs: a tie threads down one slot, around the
-# fan bundle lying on the rear face, and back up the other. The three inner
-# pairs sit in the 8 mm gaps between fan bodies; the outboard pair is strain
-# relief where the bundle leaves for the USB supply.
-TIE_SLOT_X = (-48.0, 0.0, 48.0, 108.0)
+# Zip-tie slot pairs, one pair either side of every fan opening at +/-26.
+# They dress the fan wiring, and because each opening is flanked symmetrically
+# a single tie also straps a blanking plug into an unused one -- the tie
+# crosses the plug's flange squarely, so it sits in the flange channel.
+TIE_SLOT_X = (-89.55, -37.55, -26.0, 26.0, 37.55, 89.55)
 TIE_SLOT_Y = (14.0, 30.0)
 TIE_SLOT_W = 2.5          # across the plate
 TIE_SLOT_H = 5.0          # along the plate
 
-# Fans: Noctua NF-A4x20 5V
-FAN_CENTERS_X = (-72.0, -24.0, 24.0, 72.0)
+# Fans: Noctua NF-A4x20 5V, three of them at the centroids of three equal
+# zones across the duct. The duct's own free area is about 3880 mm2 with a
+# MacBook in it; three Ø39 openings are 3584, which is the crossover where
+# the openings stop being the restriction. Four was 4778, past it.
+FAN_CENTERS_X = (-63.55, 0.0, 63.55)
 FAN_CENTER_Y = 22.225
 FAN_OPENING_DIA = 39.0
 FAN_SCREW_PITCH = 32.0
