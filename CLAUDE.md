@@ -61,6 +61,20 @@ Fusion API note: all Fusion API lengths are centimeters. The scripts define
 terminology change means regenerating it (`build_depth_diagram.py`, runs
 locally). The other renders are text-free Fusion output.
 
+`cad/` holds a STEP and an F3D beside each part. Only `build_fan_plug.py`
+writes its own; everything else is exported with `export_active_cad.py` after
+the build script leaves the part in the active document. A stale F3D is worse
+than a missing one, because it opens fine and shows the wrong geometry.
+
+One trap worth knowing before you regenerate them. **The heat-set rear ear
+does not come from `build_rear_ear_v2.py`.** That script builds from the
+original `MacBook Pro Rear Ear` document and produces a part 1124 mm3 lighter
+than the one that ships — it has a 5 mm back plate where the real one has 7,
+and none of the pocket or relief fixes. `exports/rear_ear_v2.stl` and
+`cad/rear_ear_v2_heatset.*` come from **`MacBook Pro Rear Ear v2 Parametric`**.
+The script is still the source for the self-tap and nut-trap variants, which
+have no parametric document of their own.
+
 Regenerating a 3MF or STL on a different trimesh version rewrites float
 formatting across the whole file, which buries a real change in noise. If
 the mesh itself didn't change, restore it with `git checkout -- exports/`
