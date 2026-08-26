@@ -42,8 +42,10 @@ SCREW_CLEAR_DIA = 3.4
 HEAD_CBORE_DIA = 6.5
 HEAD_CBORE_DEPTH = 2.0
 
-# Zip-tie slot pairs, one in each clear span between the fan bodies plus one
-# outboard at each end. The fan fills the unit to within 1.8 mm top and bottom,
+# Zip-tie slot pairs: one per fan. Each fan's lead is tied down in the first
+# clear span it reaches heading toward the USB supply, and the outboard pair
+# is strain relief where the bundle leaves. This makes the plate handed --
+# route the bundle the other way and there is no outboard tie on that side. The fan fills the unit to within 1.8 mm top and bottom,
 # so those spans are the only places a lead can cross the plate -- and the
 # NF-A4x20's lead leaves the side of the frame at the plate face, landing
 # straight in one. Each fan's lead is tied in the adjacent span; the outboard
@@ -53,7 +55,7 @@ HEAD_CBORE_DEPTH = 2.0
 # x and a tie has to cross what it holds. 9.5 mm apart is enough to thread and
 # cinch a ~3 mm three-wire lead; the previous 16 mm let it wander. Both rows
 # clear the fan screw holes at y = 6.225 and 38.225.
-TIE_SLOT_X = (-89.44, -31.78, 31.78, 89.44)
+TIE_SLOT_X = (-31.78, 31.78, 89.44)
 TIE_SLOT_Y = (17.5, 27.0)
 TIE_SLOT_W = 2.5          # across the plate
 TIE_SLOT_H = 5.0          # along the plate

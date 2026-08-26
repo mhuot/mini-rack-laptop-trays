@@ -22,7 +22,7 @@ FAN_CENTRES_X = (-63.55, 0.0, 63.55)
 FAN_CENTRE_Y, FAN_OPENING_DIA, FAN_BODY = 22.225, 39.0, 40.0
 FAN_SCREW_PITCH, FAN_SCREW_DIA = 32.0, 3.6
 BOSS_X, BOSS_ROWS, CBORE_DIA = 102.82, (15.0, 29.45), 6.5
-TIE_SLOT_X = (-89.44, -31.78, 31.78, 89.44)
+TIE_SLOT_X = (-31.78, 31.78, 89.44)
 TIE_SLOT_Y = (17.5, 27.0)
 TIE_SLOT_W, TIE_SLOT_H = 2.5, 5.0
 
@@ -124,8 +124,6 @@ def draw():
     for slot_x in TIE_SLOT_X:
         ax.text(slot_x, PLATE_Y1 + 2.0, f"{slot_x:+.2f}", ha="center",
                 fontsize=8, color=TIE)
-    ax.text(-89.44, -6.5, "spare tie point\n(mirror routing)", ha="center",
-            fontsize=8.5, color=TIE)
     ax.text(0, -8.0, "Solid = the bundle lying on the plate, where a tie can hold it.\n"
                      "Dashed = riding over a fan frame, 20 mm off the plate.",
             ha="center", fontsize=9, color=INK)
