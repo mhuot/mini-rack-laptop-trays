@@ -72,6 +72,8 @@ Panels are 2.2 mm rather than 2.0 for the same reason a loose hinge rattles: 2.0
 
 `scripts/check_rear_assembly.py` fits the exported STLs together and checks both of these — every pair intersected exactly for interference, then a flood fill of the air in a cross-section to see whether the duct reaches ambient. It currently reports no interference, and a seal with each panel resting against either wall of its slot.
 
+![Fan plate from behind, showing the fans, tie slots and lead routing](docs/images/fan-wiring.png)
+
 ### Why three fans
 
 Three is where the fan openings stop being the restriction. The duct's own free
