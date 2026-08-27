@@ -111,12 +111,24 @@ def draw(ax, name, length, thickness, colour, stop_z):
     ax.text(PLATE[1] + FAN_DEPTH / 2, RACK_UNIT / 2, "fan", ha="center",
             va="center", fontsize=8, color="white", rotation=90)
 
+    # The bore is open all the way to the back plate -- the same face the
+    # laptop stops against -- but the 243 mm rod ends well short of it.
     for row in ROD_ROWS:
+        ax.add_patch(Rectangle((RAIL_DEPTH, row - ROD_DIA / 2),
+                               stop_z - RAIL_DEPTH, ROD_DIA,
+                               facecolor="none", edgecolor=METAL, lw=.9,
+                               ls=(0, (3, 2))))
         ax.add_patch(Rectangle((ROD_Z[0], row - ROD_DIA / 2),
                                ROD_Z[1] - ROD_Z[0], ROD_DIA,
                                facecolor=METAL, edgecolor="#6d7780", lw=.8))
-    ax.text(120, ROD_ROWS[0], "8 mm rod", fontsize=8.5, color="#404a52",
-            ha="center", va="center")
+    ax.text(120, ROD_ROWS[0], "8 mm rod, 243 long", fontsize=8.5,
+            color="#404a52", ha="center", va="center")
+    ax.annotate(f"{stop_z - ROD_Z[1]:.0f} mm of bore left empty:\n"
+                f"the rod stops {stop_z - ROD_Z[1]:.0f} short of the back plate",
+                xy=((ROD_Z[1] + stop_z) / 2, ROD_ROWS[1]),
+                xytext=(PLATE[1] + FAN_DEPTH + 6, ROD_ROWS[1] + 6),
+                fontsize=9, color="#7a4b00", va="center",
+                arrowprops=dict(arrowstyle="->", color="#7a4b00", lw=1.1))
 
     front = stop_z - length
     ax.add_patch(Rectangle((front, LAPTOP_SEAT), length, thickness,
