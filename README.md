@@ -4,13 +4,13 @@
 
 ![Rack mockup with both laptops](docs/images/rack-hero.png)
 
-Each laptop slides in and out like a drawer on four 8 mm smooth rods, held by 3D-printed ears on the front and rear rack rails. A printed fan plate with four 40 mm Noctua fans bolts onto the rear ears and pulls air across the top and bottom of the laptop, exhausting out the back — all within a single rack unit.
+Each laptop slides in and out like a drawer on four 8 mm smooth rods, held by 3D-printed ears on the front and rear rack rails. A printed fan plate with three 40 mm Noctua fans bolts onto the rear ears and pulls air across the top and bottom of the laptop, exhausting out the back — all within a single rack unit.
 
 ![Turntable spin of the full rack](docs/images/rack-turntable.gif)
 
 ![Exploded view of one tray flying apart and back together](docs/images/rack-explode.gif)
 
-Every printed part in the bill of materials is in there, except the fan opening plug — that one only exists if you run two fans instead of four, and this shows four. Fasteners are not modelled.
+Every printed part in the bill of materials is in there, except the fan opening plug — that one only exists if you run two fans instead of three, and this shows three. Fasteners are not modelled.
 
 Want to spin it yourself? **[Open the interactive 3D viewer](https://mhuot.github.io/mini-rack-laptop-trays/)** — full color, drag to orbit, scroll to zoom. GitHub also renders **[docs/rack-mockup.stl](docs/rack-mockup.stl)** with its built-in STL viewer. (Both are visual mockups, not print files — the printable STLs live in [`exports/`](exports/). Printed parts are shown in orange; print in whatever color you like.)
 
@@ -66,9 +66,9 @@ The duct is modular on purpose. The two panels slide into duct rails on the rear
 
 Those duct rails reach 10 mm inboard from each ear, into the dead space above and below the laptop, and carry a 2.4 mm slot between 2 mm walls. That holds a panel over 12 mm of its width rather than the 2 mm a pocket in the ear face managed on its own, and it does it without making the panel any bigger — the rails add material rather than hollowing the ear out, so the rod bores are untouched and the part still prints with no overhangs.
 
-The duct rails only grip 10 mm at each end, though, which left 170 mm of free sheet whose rear edge had nothing holding it against the fan plate. So the plate carries a 2 mm-deep capture groove on each panel line and the panels run 74 mm — 72 of duct plus 2 into the groove. That laps the joint instead of butting it, and pulls the rear edge flat at the same time. Along the panel line each fan opening is only about 8.6 mm wide, so roughly 69% of the panel edge lands in solid groove and the rest opens into a fan opening, which is where the air is going anyway.
+The duct rails only grip 10 mm at each end, though, which left 170 mm of free sheet whose rear edge had nothing holding it against the fan plate. So the plate carries a 2 mm-deep capture groove on each panel line and the panels run 74 mm — 72 of duct plus 2 into the groove. That laps the joint instead of butting it, and pulls the rear edge flat at the same time. Along the panel line each fan opening is only about 8.6 mm wide, so roughly 76% of the panel edge lands in solid groove and the rest opens into a fan opening, which is where the air is going anyway.
 
-Panels are 2.2 mm rather than 2.0 for the same reason a loose hinge rattles: 2.0 in a 2.4 slot leaves 0.4 mm of free play, and a 37 g sheet with that much room next to four fans will buzz. 2.2 is eleven layers at 0.2 mm and halves the gap to a normal sliding fit.
+Panels are 2.2 mm rather than 2.0 for the same reason a loose hinge rattles: 2.0 in a 2.4 slot leaves 0.4 mm of free play, and a 37 g sheet with that much room next to the fans will buzz. 2.2 is eleven layers at 0.2 mm and halves the gap to a normal sliding fit.
 
 `scripts/check_rear_assembly.py` fits the exported STLs together and checks both of these — every pair intersected exactly for interference, then a flood fill of the air in a cross-section to see whether the duct reaches ambient. It currently reports no interference, and a seal with each panel resting against either wall of its slot.
 
@@ -129,13 +129,13 @@ The box gives you everything except the USB end: each fan ships with a 30 cm ext
 Per tray:
 
 1. Sacrifice any USB-A cable. Cut off the device end, strip the jacket, keep the **red (+5 V)** and **black (GND)** conductors, and insulate the data pair (green/white) out of the way.
-2. Join all four fans' +5 V leads to USB red and all four GND leads to USB black with the OmniJoin connectors (identify the fan leads from the OmniJoin instruction leaflet — Noctua's cables are all-black, the leaflet is the pinout). Leave each fan's tach lead unconnected and insulated; nothing reads it.
+2. Join all three fans' +5 V leads to USB red and all three GND leads to USB black with the OmniJoin connectors (identify the fan leads from the OmniJoin instruction leaflet — Noctua's cables are all-black, the leaflet is the pinout). Leave each fan's tach lead unconnected and insulated; nothing reads it.
 3. Route the bundle along the top duct panel, down the inside of the rear post, and zip-tie it with a service loop generous enough that the fan plate can be unscrewed without unplugging anything.
 4. Plug in and confirm all four spin before sliding the laptop in.
 
-If you'd rather not splice four joints, three [NA-SYC1 Y-cables](https://www.amazon.com/Noctua-NA-SYC1-black-NA-SYC1-chromax-Black-y-Cables/dp/B076542HBN) merge the four fans to a single 3-pin lead first, leaving one splice to the USB cable. Passive wiring, fine at 5 V.
+If you'd rather not splice three joints, two [NA-SYC1 Y-cables](https://www.amazon.com/Noctua-NA-SYC1-black-NA-SYC1-chromax-Black-y-Cables/dp/B076542HBN) merge the three fans to a single 3-pin lead first, leaving one splice to the USB cable. Passive wiring, fine at 5 V.
 
-**Two fans or four?** Rough math says two fans per tray move enough air for typical clamshell loads (~14 °C air rise carrying 40 W); four is margin for sustained heavy load in a warm room. The plate has four openings either way, and empty openings would let the running fans pull backflow — so if you start with two, print two plugs and press them into the unused openings from the rear (duct suction seats them tighter). Outer positions for the fans, inner for the plugs. To upgrade later, drive an M3 screw two turns into a plug's center pilot, pull it, and add the fan — no reprint. The print plates include two plugs.
+**Two fans or three?** Rough math says two fans per tray move enough air for typical clamshell loads (~14 °C air rise carrying 40 W); three is what the duct can actually swallow — see [Why three fans](#why-three-fans). The plate has three openings either way, and an empty opening would let the running fans pull backflow, so if you start with two, print a plug and press it into the unused opening from the rear (duct suction seats it tighter). Use the two outer positions and plug the centre. To upgrade later, drive an M3 screw two turns into the plug's center pilot, pull it, and add the third fan — no reprint. The print plates include two plugs.
 
 ## Smooth rods
 
